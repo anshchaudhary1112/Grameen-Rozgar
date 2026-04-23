@@ -1,1146 +1,1687 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Rozgar Setu - Local Employment System</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RozgarSetu - Local Employment System</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== GLOBAL RESET & VARIABLES ===== */
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --saffron:#FF6B00;--saffron-light:#FFF0E6;--saffron-dark:#CC5400;
-  --green:#1A7A4A;--green-light:#E6F5ED;--green-dark:#0F5533;
-  --sky:#1565C0;--sky-light:#E3F0FF;--sky-dark:#0D47A1;
-  --sand:#FFF8F0;--white:#FFFFFF;
-  --text:#1A1A1A;--text-muted:#666;--text-light:#999;
-  --border:#E0E0E0;--border-light:#F0F0F0;
-  --radius:12px;--radius-sm:8px;--shadow:0 2px 12px rgba(0,0,0,0.08);
-  --shadow-lg:0 8px 32px rgba(0,0,0,0.12);
-  --font:'Baloo 2',sans-serif;--font-body:'Noto Sans',sans-serif;
+:root {
+  --primary: #E8531A;
+  --primary-dark: #C04010;
+  --primary-light: #FF7043;
+  --secondary: #1565C0;
+  --secondary-light: #1E88E5;
+  --accent: #FFA000;
+  --success: #2E7D32;
+  --danger: #C62828;
+  --bg: #FFF8F5;
+  --bg-card: #FFFFFF;
+  --text: #1A1A1A;
+  --text-muted: #6D6D6D;
+  --border: #E0D5D0;
+  --shadow: 0 4px 20px rgba(232,83,26,0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-main: 'Baloo 2', cursive;
+  --font-hindi: 'Noto Sans Devanagari', sans-serif;
 }
-body{font-family:var(--font-body);background:var(--sand);color:var(--text);min-height:100vh;font-size:16px;line-height:1.6}
-h1,h2,h3,h4{font-family:var(--font)}
-button{cursor:pointer;font-family:var(--font);border:none;outline:none}
-input,select,textarea{font-family:var(--font-body);font-size:16px}
-a{text-decoration:none;color:inherit}
 
-/* ===== LAYOUT ===== */
-.app{display:flex;flex-direction:column;min-height:100vh}
-.page{flex:1;padding:16px;max-width:480px;margin:0 auto;width:100%;padding-bottom:80px}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ===== NAV BAR ===== */
-.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
-.topbar-logo{font-family:var(--font);font-size:20px;font-weight:800;color:var(--saffron);display:flex;align-items:center;gap:6px}
-.topbar-logo span{color:var(--green)}
-.lang-btn{background:var(--sand);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;color:var(--text-muted)}
-.lang-btn:hover{background:var(--saffron-light);color:var(--saffron)}
+body {
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-/* ===== BOTTOM NAV ===== */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding:8px 0 12px;z-index:100;box-shadow:0 -2px 12px rgba(0,0,0,0.06)}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--text-light);flex:1;padding:4px 0;border-radius:var(--radius-sm);transition:color 0.15s}
-.nav-item.active{color:var(--saffron)}
-.nav-icon{font-size:22px;line-height:1}
+/* PAGES */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
 
-/* ===== BUTTONS ===== */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:var(--radius);font-size:16px;font-weight:600;font-family:var(--font);transition:all 0.15s;width:100%}
-.btn-primary{background:var(--saffron);color:var(--white)}
-.btn-primary:hover{background:var(--saffron-dark)}
-.btn-secondary{background:var(--green);color:var(--white)}
-.btn-secondary:hover{background:var(--green-dark)}
-.btn-outline{background:transparent;color:var(--saffron);border:2px solid var(--saffron)}
-.btn-outline:hover{background:var(--saffron-light)}
-.btn-sky{background:var(--sky);color:var(--white)}
-.btn-sky:hover{background:var(--sky-dark)}
-.btn-sm{padding:8px 16px;font-size:14px;width:auto;border-radius:var(--radius-sm)}
-.btn-whatsapp{background:#25D366;color:white}
-.btn-call{background:var(--sky);color:white}
-.btn-danger{background:#D32F2F;color:white}
+/* NAV */
+.top-nav {
+  background: var(--primary);
+  color: white;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+}
+.nav-logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo span { font-size: 14px; font-weight: 400; opacity: 0.9; display: block; line-height: 1; }
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.lang-btn {
+  background: rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: var(--font-main);
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.lang-btn:hover { background: rgba(255,255,255,0.3); }
 
-/* ===== CARDS ===== */
-.card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px;border:1px solid var(--border-light)}
-.card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--primary) 0%, #C04010 50%, #8B2500 100%);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 70% 30%, rgba(255,160,0,0.15) 0%, transparent 60%);
+}
+.hero-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin-bottom: 8px; position: relative; }
+.hero-sub { font-size: 16px; opacity: 0.9; margin-bottom: 30px; position: relative; }
+.hero-hindi { font-family: var(--font-hindi); font-size: 18px; opacity: 0.85; margin-bottom: 6px; }
 
-/* ===== FORMS ===== */
-.form-group{margin-bottom:16px}
-.form-label{display:block;font-size:14px;font-weight:600;color:var(--text-muted);margin-bottom:6px}
-.form-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:16px;background:var(--white);transition:border-color 0.15s;color:var(--text)}
-.form-input:focus{border-color:var(--saffron);outline:none;background:#FFFDF9}
-.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.hero-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 340px; margin: 0 auto; position: relative; }
 
-/* ===== TAGS / BADGES ===== */
-.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
-.badge-saffron{background:var(--saffron-light);color:var(--saffron-dark)}
-.badge-green{background:var(--green-light);color:var(--green-dark)}
-.badge-blue{background:var(--sky-light);color:var(--sky-dark)}
-.badge-gray{background:#F5F5F5;color:#555}
-.badge-red{background:#FFEBEE;color:#C62828}
+.big-btn {
+  background: white;
+  color: var(--primary);
+  border: none;
+  padding: 18px 10px;
+  border-radius: var(--radius);
+  font-family: var(--font-main);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+.big-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+.big-btn:active { transform: scale(0.97); }
+.big-btn .icon { font-size: 30px; }
+.big-btn.employer { color: var(--secondary); }
+.big-btn .sub-text { font-size: 11px; font-weight: 500; color: var(--text-muted); font-family: var(--font-hindi); }
 
-/* ===== JOB CARD ===== */
-.job-card{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border-light);transition:transform 0.1s,box-shadow 0.1s}
-.job-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
-.job-card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
-.job-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.job-title{font-family:var(--font);font-size:17px;font-weight:700;color:var(--text);line-height:1.3}
-.job-company{font-size:13px;color:var(--text-muted);margin-top:2px}
-.job-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.job-meta-item{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-muted)}
-.job-actions{display:flex;gap:8px;margin-top:12px}
+/* SEARCH BAR */
+.search-section {
+  padding: 20px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+.search-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 8px 16px;
+  transition: border-color 0.2s;
+}
+.search-bar:focus-within { border-color: var(--primary); }
+.search-bar input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-family: var(--font-main);
+  font-size: 16px;
+  outline: none;
+  color: var(--text);
+}
+.search-bar .search-icon { font-size: 20px; color: var(--text-muted); }
+.voice-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.voice-btn:hover { background: var(--primary-dark); }
+.voice-btn.listening { background: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-/* ===== CATEGORY GRID ===== */
-.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
-.cat-card{background:var(--white);border-radius:var(--radius);padding:14px 8px;text-align:center;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:all 0.15s}
-.cat-card:hover,.cat-card.active{border-color:var(--saffron);background:var(--saffron-light)}
-.cat-icon{font-size:30px;margin-bottom:6px}
-.cat-name{font-size:12px;font-weight:600;color:var(--text)}
+/* CATEGORIES */
+.section { padding: 20px; }
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.cat-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cat-card:hover, .cat-card.active {
+  border-color: var(--primary);
+  background: #FFF3EE;
+  transform: translateY(-2px);
+}
+.cat-card .emoji { font-size: 28px; display: block; margin-bottom: 6px; }
+.cat-card .name { font-size: 11px; font-weight: 600; color: var(--text); }
+.cat-card .hindi { font-family: var(--font-hindi); font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
-/* ===== HERO SECTION ===== */
-.hero{background:linear-gradient(135deg,var(--saffron) 0%,#FF8C00 100%);border-radius:var(--radius);padding:20px;margin-bottom:16px;color:white;position:relative;overflow:hidden}
-.hero::before{content:'🌟';position:absolute;right:-10px;top:-10px;font-size:80px;opacity:0.15}
-.hero h2{font-size:22px;font-weight:800;line-height:1.3;margin-bottom:8px}
-.hero p{font-size:14px;opacity:0.9}
+/* JOB CARDS */
+.jobs-list { display: flex; flex-direction: column; gap: 14px; }
+.job-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.job-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--primary);
+  border-radius: 4px 0 0 4px;
+}
+.job-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateX(3px); }
+.job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.job-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.job-salary {
+  background: #E8F5E9;
+  color: var(--success);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.job-company { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+.job-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.job-tag {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.job-actions { display: flex; gap: 10px; }
+.apply-btn {
+  flex: 1;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.apply-btn:hover { background: var(--primary-dark); }
+.apply-btn:active { transform: scale(0.97); }
+.call-btn {
+  background: var(--success);
+  color: white;
+  border: none;
+  padding: 13px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.call-btn:hover { background: #1B5E20; }
+.wa-btn {
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 13px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 18px;
+  cursor: pointer;
+}
+.distance-badge {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: #E3F2FD;
+  color: var(--secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
 
-/* ===== SEARCH BAR ===== */
-.search-wrap{position:relative;margin-bottom:16px}
-.search-input{width:100%;padding:14px 48px 14px 16px;border:2px solid var(--border);border-radius:var(--radius);font-size:16px;background:var(--white);transition:border-color 0.15s}
-.search-input:focus{border-color:var(--saffron);outline:none}
-.search-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--text-muted)}
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  padding: 28px 24px 40px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.modal-close {
+  background: var(--bg);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-/* ===== STATS BAR ===== */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.stat-box{background:var(--white);border-radius:var(--radius-sm);padding:12px;text-align:center;box-shadow:var(--shadow)}
-.stat-num{font-family:var(--font);font-size:22px;font-weight:800}
-.stat-label{font-size:11px;color:var(--text-muted);font-weight:600}
+/* FORMS */
+.form-group { margin-bottom: 18px; }
+.form-label { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; }
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--primary); background: white; }
+.form-select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+.primary-btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.primary-btn:hover { background: var(--primary-dark); }
+.secondary-btn {
+  width: 100%;
+  background: transparent;
+  color: var(--secondary);
+  border: 2px solid var(--secondary);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.secondary-btn:hover { background: var(--secondary); color: white; }
 
-/* ===== MODAL ===== */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:flex;align-items:flex-end}
-.modal-box{background:var(--white);width:100%;border-radius:var(--radius) var(--radius) 0 0;padding:20px;max-height:85vh;overflow-y:auto}
-.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-.modal-close{position:absolute;right:16px;top:16px;font-size:24px;color:var(--text-muted);background:none;border:none;cursor:pointer}
+/* MAP */
+#map-container {
+  width: 100%;
+  height: 300px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 2px solid var(--border);
+  margin-bottom: 16px;
+  background: #e8f0fe;
+  position: relative;
+}
+.map-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--secondary);
+  font-size: 14px;
+  background: linear-gradient(135deg, #e8f0fe, #e3f2fd);
+}
+.map-placeholder .map-icon { font-size: 40px; }
 
-/* ===== TABS ===== */
-.tabs{display:flex;background:var(--border-light);border-radius:var(--radius-sm);padding:3px;margin-bottom:16px}
-.tab{flex:1;padding:9px;text-align:center;font-size:14px;font-weight:600;border-radius:6px;color:var(--text-muted);transition:all 0.15s;cursor:pointer}
-.tab.active{background:var(--white);color:var(--saffron);box-shadow:var(--shadow)}
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1.5px solid var(--border);
+  display: flex;
+  z-index: 50;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 14px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  gap: 3px;
+  transition: color 0.2s;
+  border: none;
+  background: none;
+  font-family: var(--font-main);
+}
+.nav-item .nav-icon { font-size: 22px; }
+.nav-item.active { color: var(--primary); }
+.nav-item.active .nav-icon { transform: scale(1.15); }
 
-/* ===== STATUS PILL ===== */
-.status-pending{background:#FFF8E1;color:#F57F17;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
-.status-approved{background:var(--green-light);color:var(--green-dark);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
-.status-rejected{background:#FFEBEE;color:#C62828;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
+/* NOTIFICATIONS */
+.notif-badge {
+  background: var(--danger);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 10px;
+  position: absolute;
+  top: -4px;
+  right: -6px;
+}
 
-/* ===== ADMIN ===== */
-.admin-sidebar{display:none}
-.admin-content{width:100%}
-.admin-stat{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);text-align:center;border-left:4px solid var(--saffron)}
-.table-wrap{overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow)}
-table{width:100%;border-collapse:collapse;font-size:13px;background:white}
-th{background:#F8F8F8;padding:10px 12px;text-align:left;font-weight:600;color:var(--text-muted);font-size:12px;text-transform:uppercase;border-bottom:1px solid var(--border)}
-td{padding:10px 12px;border-bottom:1px solid var(--border-light);vertical-align:middle}
-tr:last-child td{border-bottom:none}
+/* PROFILE PAGE */
+.profile-header {
+  background: var(--primary);
+  color: white;
+  padding: 30px 20px 50px;
+  text-align: center;
+}
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  border: 3px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 14px;
+}
+.profile-name { font-size: 22px; font-weight: 800; }
+.profile-skill { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+.profile-stats {
+  display: flex;
+  gap: 0;
+  background: white;
+  margin: -25px 20px 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.stat-item {
+  flex: 1;
+  text-align: center;
+  padding: 18px 10px;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: 22px; font-weight: 800; color: var(--primary); }
+.stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.menu-list { margin-top: 20px; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+.menu-item:hover { background: var(--bg); }
+.menu-item .menu-icon { font-size: 22px; width: 28px; }
+.menu-item .arrow { margin-left: auto; color: var(--text-muted); }
 
-/* ===== EMPTY STATE ===== */
-.empty{text-align:center;padding:40px 20px;color:var(--text-muted)}
-.empty-icon{font-size:56px;margin-bottom:12px}
-.empty h3{font-size:18px;color:var(--text);margin-bottom:6px}
+/* ALERTS */
+.alert {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.alert-success { background: #E8F5E9; color: var(--success); border: 1px solid #C8E6C9; }
+.alert-danger { background: #FFEBEE; color: var(--danger); border: 1px solid #FFCDD2; }
+.alert-info { background: #E3F2FD; color: var(--secondary); border: 1px solid #BBDEFB; }
 
-/* ===== VOICE BUTTON ===== */
-.voice-btn{width:48px;height:48px;background:var(--saffron);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:var(--shadow);flex-shrink:0}
-.voice-btn.listening{animation:pulse 1s infinite;background:var(--saffron-dark)}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,0,0.4)}50%{box-shadow:0 0 0 8px rgba(255,107,0,0)}}
+/* STARS */
+.stars { color: var(--accent); font-size: 16px; }
 
-/* ===== LOADING ===== */
-.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--saffron);border-radius:50%;animation:spin 0.7s linear infinite;margin:20px auto}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* CHIPS */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: white;
+}
+.chip.active, .chip:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
 
-/* ===== NOTIFICATION TOAST ===== */
-.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#1A1A1A;color:white;padding:12px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;z-index:300;white-space:nowrap;box-shadow:var(--shadow-lg);animation:toastIn 0.25s ease}
-@keyframes toastIn{from{opacity:0;top:60px}to{opacity:1;top:72px}}
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  z-index: 9999;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ===== PROFILE ===== */
-.avatar-circle{width:72px;height:72px;border-radius:50%;background:var(--saffron-light);border:3px solid var(--saffron);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--saffron);font-family:var(--font)}
-.profile-header{text-align:center;padding:20px 0 16px}
+/* DARK MODE */
+body.dark {
+  --bg: #121212;
+  --bg-card: #1E1E1E;
+  --text: #FFFFFF;
+  --text-muted: #AAAAAA;
+  --border: #333333;
+}
 
-/* ===== DIVIDER ===== */
-.divider{border:none;border-top:1px solid var(--border-light);margin:16px 0}
+/* SCROLLABLE CONTENT */
+.content-scroll { padding-bottom: 80px; }
 
-/* ===== SECTION TITLE ===== */
-.section-title{font-family:var(--font);font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+/* RATING */
+.rating-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
 
-/* ===== ADMIN HEADER ===== */
-.admin-header{background:linear-gradient(135deg,var(--sky) 0%,var(--sky-dark) 100%);color:white;padding:20px;margin:-16px -16px 16px;border-radius:0 0 var(--radius) var(--radius)}
+/* EMPLOYER CARD */
+.emp-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.emp-header { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+.emp-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background: #E3F2FD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+.emp-name { font-size: 17px; font-weight: 700; }
+.emp-type { font-size: 13px; color: var(--text-muted); }
+.verified-badge {
+  background: #E8F5E9;
+  color: var(--success);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
 
-/* ===== RATING STARS ===== */
-.stars span{font-size:16px;color:#ccc}
-.stars span.filled{color:#FFC107}
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media(max-width: 380px) {
+  .hero-title { font-size: 28px; }
+  .cats-grid { grid-template-columns: repeat(3, 1fr); }
+}
 </style>
 </head>
 <body>
-<div id="app"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ======== MAIN APP ======== -->
+<div class="page active" id="home-page">
+
+  <nav class="top-nav">
+    <div class="nav-logo">
+      🌾 RozgarSetu
+      <span id="nav-location">📍 Your City</span>
+    </div>
+    <div class="nav-actions">
+      <button class="lang-btn" onclick="toggleLang()">हिंदी</button>
+      <button style="background:none;border:none;color:white;font-size:22px;cursor:pointer;" onclick="openPage('notifications-page')">🔔</button>
+    </div>
+  </nav>
+
+  <div class="content-scroll">
+
+    <!-- HERO -->
+    <div class="hero" id="hero-section">
+      <p class="hero-hindi">नौकरी ढूंढना अब आसान है!</p>
+      <h1 class="hero-title">Find Work Near You</h1>
+      <p class="hero-sub">Driver • Helper • Cleaner • Labour • Delivery</p>
+      <div class="hero-btns">
+        <button class="big-btn" onclick="openModal('worker-register')">
+          <span class="icon">👷</span>
+          <strong data-en="Find Job" data-hi="नौकरी खोजें">Find Job</strong>
+          <span class="sub-text">मजदूर / कर्मचारी</span>
+        </button>
+        <button class="big-btn employer" onclick="openModal('employer-register')">
+          <span class="icon">🏢</span>
+          <strong data-en="Post Job" data-hi="नौकरी दें">Post Job</strong>
+          <span class="sub-text">नियोक्ता / मालिक</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-section">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search jobs... नौकरी खोजें" oninput="filterJobs()">
+        <button class="voice-btn" id="voice-btn" onclick="startVoice()" title="Voice Search">🎤</button>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="section">
+      <div class="section-title">📂 <span data-en="Job Categories" data-hi="नौकरी के प्रकार">Job Categories</span></div>
+      <div class="cats-grid" id="cats-grid"></div>
+    </div>
+
+    <!-- NEARBY JOBS -->
+    <div class="section">
+      <div class="section-title">
+        📍 <span data-en="Jobs Near You" data-hi="आपके पास नौकरियाँ">Jobs Near You</span>
+        <button onclick="detectLocation()" style="margin-left:auto;background:var(--primary-light);color:white;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-main);">📡 GPS</button>
+      </div>
+      <div class="jobs-list" id="jobs-list">
+        <div class="loading"><div class="spinner"></div>Loading jobs...</div>
+      </div>
+    </div>
+
+  </div><!-- end content-scroll -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('home')">
+      <span class="nav-icon">🏠</span>
+      <span data-en="Home" data-hi="होम">Home</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('search')">
+      <span class="nav-icon">🔍</span>
+      <span data-en="Search" data-hi="खोजें">Search</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('applications')">
+      <span class="nav-icon">📋</span>
+      <span data-en="Applied" data-hi="आवेदन">Applied</span>
+    </button>
+    <button class="nav-item" onclick="openPage('profile-page')">
+      <span class="nav-icon">👤</span>
+      <span data-en="Profile" data-hi="प्रोफ़ाइल">Profile</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- ======== PROFILE PAGE ======== -->
+<div class="page" id="profile-page">
+  <div class="profile-header">
+    <div class="avatar" id="profile-avatar">👷</div>
+    <div class="profile-name" id="profile-name">Guest User</div>
+    <div class="profile-skill" id="profile-skill-display">Register to get started</div>
+  </div>
+  <div class="profile-stats">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-applied">0</div>
+      <div class="stat-label">Applied</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-shortlisted">0</div>
+      <div class="stat-label">Shortlisted</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-rating">4.8⭐</div>
+      <div class="stat-label">Rating</div>
+    </div>
+  </div>
+  <div class="menu-list">
+    <div class="menu-item" onclick="openModal('edit-profile')"><span class="menu-icon">✏️</span>Edit Profile<span class="arrow">›</span></div>
+    <div class="menu-item" onclick="openModal('my-location')"><span class="menu-icon">📍</span>My Location<span class="arrow">›</span></div>
+    <div class="menu-item" onclick="openPage('my-applications-page')"><span class="menu-icon">📋</span>My Applications<span class="arrow">›</span></div>
+    <div class="menu-item" onclick="openModal('notifications-settings')"><span class="menu-icon">🔔</span>Notifications<span class="arrow">›</span></div>
+    <div class="menu-item" onclick="toggleDark()"><span class="menu-icon">🌙</span>Dark Mode<span class="arrow">›</span></div>
+    <div class="menu-item" onclick="toggleLang()"><span class="menu-icon">🌐</span>Language: English / हिंदी<span class="arrow">›</span></div>
+    <div class="menu-item" onclick="openPage('home-page')"><span class="menu-icon">🏠</span>Home<span class="arrow">›</span></div>
+    <div class="menu-item" style="color:var(--danger)" onclick="logout()"><span class="menu-icon">🚪</span>Logout</div>
+  </div>
+</div>
+
+<!-- ======== MY APPLICATIONS PAGE ======== -->
+<div class="page" id="my-applications-page">
+  <nav class="top-nav">
+    <button onclick="openPage('profile-page')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">‹</button>
+    <div class="nav-logo">📋 My Applications</div>
+    <div></div>
+  </nav>
+  <div class="content-scroll" style="padding:20px;" id="applications-list">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- ======== NOTIFICATIONS ======== -->
+<div class="page" id="notifications-page">
+  <nav class="top-nav">
+    <button onclick="openPage('home-page')" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;">‹</button>
+    <div class="nav-logo">🔔 Notifications</div>
+    <div></div>
+  </nav>
+  <div style="padding:20px;" id="notifications-list"></div>
+</div>
+
+<!-- ======== EMPLOYER DASHBOARD ======== -->
+<div class="page" id="employer-page">
+  <nav class="top-nav" style="background:var(--secondary);">
+    <div class="nav-logo">🏢 Employer Dashboard</div>
+    <button onclick="openPage('home-page')" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 14px;border-radius:20px;font-size:13px;cursor:pointer;font-family:var(--font-main);">Exit</button>
+  </nav>
+  <div class="content-scroll" style="padding:20px;" id="employer-dashboard-content">
+  </div>
+</div>
+
+<!-- ======== JOB DETAIL PAGE ======== -->
+<div class="page" id="job-detail-page">
+  <nav class="top-nav">
+    <button onclick="openPage('home-page')" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;">‹</button>
+    <div class="nav-logo">💼 Job Details</div>
+    <div></div>
+  </nav>
+  <div class="content-scroll" style="padding:20px;" id="job-detail-content">
+  </div>
+</div>
+
+<!-- ======== MODALS ======== -->
+
+<!-- Worker Register -->
+<div class="modal-overlay" id="modal-worker-register">
+  <div class="modal">
+    <div class="modal-title">👷 Worker Registration <button class="modal-close" onclick="closeModal('modal-worker-register')">✕</button></div>
+    <div id="wr-msg"></div>
+    <div class="form-group">
+      <label class="form-label">Full Name / पूरा नाम</label>
+      <input class="form-input" id="wr-name" placeholder="Enter your name">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mobile / मोबाइल</label>
+      <input class="form-input" id="wr-mobile" type="tel" placeholder="10 digit mobile number">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Skill / काम</label>
+      <select class="form-select" id="wr-skill">
+        <option value="">Select your skill</option>
+        <option value="Driver">🚛 Driver / ड्राइवर</option>
+        <option value="Cleaner">🧹 Cleaner / सफाई</option>
+        <option value="Labour">🔨 Labour / मजदूर</option>
+        <option value="Helper">🤝 Helper / सहायक</option>
+        <option value="Delivery">📦 Delivery / डिलीवरी</option>
+        <option value="Security">🛡️ Security / सुरक्षा</option>
+        <option value="Cook">🍳 Cook / रसोईया</option>
+        <option value="Electrician">⚡ Electrician / बिजली</option>
+        <option value="Plumber">🔧 Plumber / प्लम्बर</option>
+        <option value="Painter">🎨 Painter / पेंटर</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">City / शहर</label>
+      <input class="form-input" id="wr-city" placeholder="Your city name">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Experience / अनुभव</label>
+      <select class="form-select" id="wr-exp">
+        <option value="Fresher">Fresher (No Experience)</option>
+        <option value="1-2 years">1-2 years</option>
+        <option value="3-5 years">3-5 years</option>
+        <option value="5+ years">5+ years</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="registerWorker()">✅ Register Now / पंजीकरण करें</button>
+    <button class="secondary-btn" onclick="openModal('worker-login')">Already registered? Login</button>
+  </div>
+</div>
+
+<!-- Worker Login -->
+<div class="modal-overlay" id="modal-worker-login">
+  <div class="modal">
+    <div class="modal-title">🔑 Worker Login <button class="modal-close" onclick="closeModal('modal-worker-login')">✕</button></div>
+    <div id="wl-msg"></div>
+    <div class="form-group">
+      <label class="form-label">Mobile / मोबाइल</label>
+      <input class="form-input" id="wl-mobile" type="tel" placeholder="Your registered mobile">
+    </div>
+    <button class="primary-btn" onclick="loginWorker()">🔑 Login</button>
+    <button class="secondary-btn" onclick="openModal('worker-register')">New user? Register</button>
+  </div>
+</div>
+
+<!-- Employer Register -->
+<div class="modal-overlay" id="modal-employer-register">
+  <div class="modal">
+    <div class="modal-title">🏢 Employer Registration <button class="modal-close" onclick="closeModal('modal-employer-register')">✕</button></div>
+    <div id="er-msg"></div>
+    <div class="form-group">
+      <label class="form-label">Company/Name / कंपनी</label>
+      <input class="form-input" id="er-name" placeholder="Company or your name">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mobile / मोबाइल</label>
+      <input class="form-input" id="er-mobile" type="tel" placeholder="10 digit mobile">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Business Type / व्यवसाय</label>
+      <select class="form-select" id="er-type">
+        <option value="Transport">Transport / ट्रांसपोर्ट</option>
+        <option value="Construction">Construction / निर्माण</option>
+        <option value="Household">Household / घरेलू</option>
+        <option value="Factory">Factory / कारखाना</option>
+        <option value="Shop">Shop / दुकान</option>
+        <option value="Restaurant">Restaurant / रेस्टोरेंट</option>
+        <option value="Other">Other / अन्य</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">City / शहर</label>
+      <input class="form-input" id="er-city" placeholder="City name">
+    </div>
+    <button class="primary-btn" onclick="registerEmployer()">✅ Register & Post Jobs</button>
+    <button class="secondary-btn" onclick="openModal('employer-login')">Already registered? Login</button>
+  </div>
+</div>
+
+<!-- Employer Login -->
+<div class="modal-overlay" id="modal-employer-login">
+  <div class="modal">
+    <div class="modal-title">🔑 Employer Login <button class="modal-close" onclick="closeModal('modal-employer-login')">✕</button></div>
+    <div id="el-msg"></div>
+    <div class="form-group">
+      <label class="form-label">Mobile / मोबाइल</label>
+      <input class="form-input" id="el-mobile" type="tel" placeholder="Registered mobile">
+    </div>
+    <button class="primary-btn" onclick="loginEmployer()">🔑 Login</button>
+    <button class="secondary-btn" onclick="openModal('employer-register')">New? Register</button>
+  </div>
+</div>
+
+<!-- Post Job -->
+<div class="modal-overlay" id="modal-post-job">
+  <div class="modal">
+    <div class="modal-title">📝 Post a Job <button class="modal-close" onclick="closeModal('modal-post-job')">✕</button></div>
+    <div id="pj-msg"></div>
+    <div class="form-group">
+      <label class="form-label">Job Title / नौकरी का नाम</label>
+      <input class="form-input" id="pj-title" placeholder="e.g. Truck Driver Needed">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category / श्रेणी</label>
+      <select class="form-select" id="pj-cat">
+        <option value="Driver">Driver</option>
+        <option value="Cleaner">Cleaner</option>
+        <option value="Labour">Labour</option>
+        <option value="Helper">Helper</option>
+        <option value="Delivery">Delivery</option>
+        <option value="Security">Security</option>
+        <option value="Cook">Cook</option>
+        <option value="Electrician">Electrician</option>
+        <option value="Plumber">Plumber</option>
+        <option value="Painter">Painter</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Salary / वेतन (per month)</label>
+      <input class="form-input" id="pj-salary" type="number" placeholder="e.g. 12000">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Job Type / कार्य प्रकार</label>
+      <select class="form-select" id="pj-type">
+        <option value="Full Time">Full Time</option>
+        <option value="Part Time">Part Time</option>
+        <option value="Daily Wage">Daily Wage / दैनिक मजदूरी</option>
+        <option value="Contract">Contract</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Location / स्थान</label>
+      <input class="form-input" id="pj-location" placeholder="Area, City">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description / विवरण</label>
+      <textarea class="form-input" id="pj-desc" rows="3" placeholder="Job details, requirements..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contact Number / संपर्क</label>
+      <input class="form-input" id="pj-contact" type="tel" placeholder="WhatsApp/Call number">
+    </div>
+    <button class="primary-btn" onclick="postJob()">📤 Post Job Now</button>
+  </div>
+</div>
+
+<!-- Location Modal -->
+<div class="modal-overlay" id="modal-my-location">
+  <div class="modal">
+    <div class="modal-title">📍 My Location <button class="modal-close" onclick="closeModal('modal-my-location')">✕</button></div>
+    <div id="map-container">
+      <div class="map-placeholder" id="map-placeholder">
+        <div class="map-icon">🗺️</div>
+        <div>Tap GPS to detect your location</div>
+        <div style="font-size:12px;color:#888;">यहाँ आपकी लोकेशन दिखेगी</div>
+      </div>
+    </div>
+    <div id="location-info" style="margin-bottom:14px;"></div>
+    <button class="primary-btn" onclick="detectLocation()">📡 Detect My Location</button>
+    <button class="secondary-btn" onclick="openGoogleMaps()">🗺️ Open in Google Maps</button>
+  </div>
+</div>
+
+<!-- Apply Confirm Modal -->
+<div class="modal-overlay" id="modal-apply-confirm">
+  <div class="modal">
+    <div class="modal-title">✅ Confirm Application <button class="modal-close" onclick="closeModal('modal-apply-confirm')">✕</button></div>
+    <div id="apply-job-info" style="background:var(--bg);padding:16px;border-radius:var(--radius-sm);margin-bottom:20px;"></div>
+    <div class="alert alert-info">📋 Your profile will be shared with the employer</div>
+    <button class="primary-btn" id="confirm-apply-btn" onclick="confirmApply()">✅ Apply Now / अभी आवेदन करें</button>
+    <button class="secondary-btn" onclick="closeModal('modal-apply-confirm')">Cancel</button>
+  </div>
+</div>
+
+<!-- Job Detail Map Modal -->
+<div class="modal-overlay" id="modal-job-map">
+  <div class="modal">
+    <div class="modal-title">🗺️ Job Location <button class="modal-close" onclick="closeModal('modal-job-map')">✕</button></div>
+    <div style="background:#e8f0fe;border-radius:var(--radius);padding:30px;text-align:center;margin-bottom:16px;">
+      <div style="font-size:50px;margin-bottom:10px;">📍</div>
+      <div id="job-map-addr" style="font-size:15px;font-weight:600;"></div>
+      <div id="job-map-dist" style="font-size:13px;color:var(--text-muted);margin-top:4px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="primary-btn" onclick="openJobInMaps()">🗺️ Google Maps</button>
+      <button class="primary-btn" style="background:var(--secondary);" onclick="getDirections()">🧭 Directions</button>
+    </div>
+  </div>
+</div>
 
 <script>
-/* ===================================================
-   LOCAL EMPLOYMENT SYSTEM - "ROZGAR SETU"
-   Full frontend application with mock backend state
-   =================================================== */
-
-// ---- APP STATE ----
-const state = {
-  lang: 'hi',         // 'hi' = Hindi, 'en' = English
-  page: 'home',       // current page
-  user: null,         // logged in user
-  userType: null,     // 'seeker'|'employer'|'admin'
-  toast: null,
-  modal: null,
-  searchQuery: '',
-  filterCategory: 'all',
-  appliedJobs: [],
-  notifications: []
+// ============ DATA STORE ============
+const DB = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } },
+  set(k, v) { localStorage.setItem(k, JSON.stringify(v)); },
+  getObj(k) { try { return JSON.parse(localStorage.getItem(k)) || null; } catch { return null; } },
+  setObj(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 };
 
-// ---- TRANSLATIONS ----
-const T = {
-  en: {
-    appName:'Rozgar Setu',appTag:'Local Jobs for Everyone',
-    login:'Login',register:'Register',logout:'Logout',
-    home:'Home',jobs:'Jobs',profile:'Profile',apply:'Apply Now',applied:'Applied ✓',
-    mobile:'Mobile Number',password:'Password',name:'Full Name',age:'Age',
-    skills:'Skills',location:'Location (City/Area)',experience:'Experience',
-    postJob:'Post Job',myJobs:'My Jobs',applicants:'Applicants',
-    salary:'Salary (per month)',jobTitle:'Job Title',contact:'Contact Number',
-    skill:'Skill Required',desc:'Job Description',
-    searchPlaceholder:'Search jobs... (e.g. driver, cleaning)',
-    categories:'Job Categories',featuredJobs:'Jobs Near You',
-    totalJobs:'Total Jobs',totalUsers:'Users',totalApps:'Applications',
-    admin:'Admin Panel',adminLogin:'Admin Login',
-    approve:'Approve',reject:'Reject',delete:'Delete',edit:'Edit',
-    whatsapp:'WhatsApp',call:'Call',
-    welcome:'Welcome!',registerAs:'Register as:',
-    seeker:'Job Seeker',employer:'Employer',
-    appliedStatus:'Applied Jobs',pending:'Pending',approved:'Approved',rejected:'Rejected',
-    notifications:'Notifications',settings:'Settings',
-    darkMode:'Dark Mode',voiceSearch:'Voice Search',
-    addCategory:'Add Category',manageUsers:'Manage Users',
-    viewApplicants:'View Applicants',
-    manageJobs:'Manage Jobs',analytics:'Analytics',
-    back:'← Back',submit:'Submit',save:'Save',cancel:'Cancel',
-    postedBy:'Posted by',postedOn:'Posted on',
-    required:'Required',
-    noJobs:'No jobs found',noApps:'No applications yet',
-    hi:'हिंदी',en:'English'
-  },
-  hi: {
-    appName:'रोज़गार सेतु',appTag:'सबके लिए स्थानीय नौकरी',
-    login:'लॉग इन',register:'रजिस्टर करें',logout:'लॉग आउट',
-    home:'होम',jobs:'नौकरी',profile:'प्रोफाइल',apply:'अभी आवेदन करें',applied:'आवेदित ✓',
-    mobile:'मोबाइल नंबर',password:'पासवर्ड',name:'पूरा नाम',age:'उम्र',
-    skills:'कौशल',location:'स्थान (शहर/क्षेत्र)',experience:'अनुभव',
-    postJob:'नौकरी पोस्ट करें',myJobs:'मेरी नौकरियाँ',applicants:'आवेदक',
-    salary:'वेतन (प्रति माह)',jobTitle:'नौकरी का नाम',contact:'संपर्क नंबर',
-    skill:'आवश्यक कौशल',desc:'नौकरी विवरण',
-    searchPlaceholder:'नौकरी खोजें... (जैसे ड्राइवर, सफाई)',
-    categories:'नौकरी श्रेणियाँ',featuredJobs:'आपके पास नौकरियाँ',
-    totalJobs:'कुल नौकरियाँ',totalUsers:'कुल उपयोगकर्ता',totalApps:'आवेदन',
-    admin:'एडमिन पैनल',adminLogin:'एडमिन लॉग इन',
-    approve:'स्वीकार',reject:'अस्वीकार',delete:'हटाएं',edit:'बदलें',
-    whatsapp:'व्हाट्सएप',call:'कॉल करें',
-    welcome:'स्वागत है!',registerAs:'रजिस्टर करें:',
-    seeker:'नौकरी खोजने वाला',employer:'नौकरी देने वाला',
-    appliedStatus:'मेरे आवेदन',pending:'बाकी',approved:'मंजूर',rejected:'नामंजूर',
-    notifications:'सूचनाएं',settings:'सेटिंग',
-    darkMode:'डार्क मोड',voiceSearch:'आवाज़ से खोजें',
-    addCategory:'श्रेणी जोड़ें',manageUsers:'उपयोगकर्ता प्रबंधन',
-    viewApplicants:'आवेदक देखें',
-    manageJobs:'नौकरियाँ प्रबंधित करें',analytics:'रिपोर्ट',
-    back:'← वापस',submit:'जमा करें',save:'सेव करें',cancel:'रद्द करें',
-    postedBy:'पोस्ट किया',postedOn:'तारीख',
-    required:'जरूरी',
-    noJobs:'कोई नौकरी नहीं मिली',noApps:'अभी कोई आवेदन नहीं',
-    hi:'हिंदी',en:'English'
-  }
-};
-const t = (key) => (T[state.lang][key] || key);
-
-// ---- SAMPLE DATA ----
-const categories = [
-  {id:'driver',icon:'🚛',name:{en:'Driver',hi:'ड्राइवर'},color:'#FFF3E0'},
-  {id:'cleaning',icon:'🧹',name:{en:'Cleaning',hi:'सफाई'},color:'#E8F5E9'},
-  {id:'delivery',icon:'📦',name:{en:'Delivery',hi:'डिलीवरी'},color:'#E3F2FD'},
-  {id:'construction',icon:'🏗️',name:{en:'Construction',hi:'निर्माण'},color:'#FBE9E7'},
-  {id:'helper',icon:'🤝',name:{en:'Helper',hi:'मजदूर'},color:'#EDE7F6'},
-  {id:'cook',icon:'🍳',name:{en:'Cook',hi:'रसोइया'},color:'#FFF8E1'},
-  {id:'security',icon:'🛡️',name:{en:'Security',hi:'सुरक्षा'},color:'#E0F7FA'},
-  {id:'farming',icon:'🌾',name:{en:'Farming',hi:'खेती'},color:'#F1F8E9'},
-  {id:'other',icon:'💼',name:{en:'Other',hi:'अन्य'},color:'#FAFAFA'},
+// ============ SEED DATA ============
+const JOBS_SEED = [
+  { id: 1, title: "Truck Driver Needed", category: "Driver", salary: 18000, type: "Full Time", location: "Gomti Nagar, Lucknow", company: "SK Transport", contact: "9876543210", desc: "Need experienced truck driver for inter-city delivery. License required. Food & accommodation provided.", rating: 4.5, distance: "2.3 km", lat: 26.85, lng: 80.95, approved: true, postedBy: "employer", date: "2 days ago" },
+  { id: 2, title: "House Cleaner / Maid", category: "Cleaner", salary: 8000, type: "Part Time", location: "Hazratganj, Lucknow", company: "Gupta Family", contact: "9123456789", desc: "Need reliable cleaner for 3-hour morning cleaning. Female preferred. Home environment, good pay.", rating: 4.8, distance: "1.1 km", lat: 26.86, lng: 80.93, approved: true, postedBy: "employer", date: "Today" },
+  { id: 3, title: "Construction Labour", category: "Labour", salary: 650, type: "Daily Wage", location: "Alambagh, Lucknow", company: "Raj Constructions", contact: "9988776655", desc: "Daily wage construction work. Bricks, cement, sand loading. 8am-5pm. Daily payment.", rating: 4.2, distance: "4.5 km", lat: 26.82, lng: 80.91, approved: true, postedBy: "employer", date: "1 day ago" },
+  { id: 4, title: "Delivery Boy / Rider", category: "Delivery", salary: 12000, type: "Full Time", location: "Indira Nagar, Lucknow", company: "QuickDeliver India", contact: "8800991122", desc: "Bike required. Smartphone with internet. Food delivery or courier. Flexible timings. Good incentives.", rating: 4.6, distance: "3.2 km", lat: 26.88, lng: 80.98, approved: true, postedBy: "employer", date: "3 hours ago" },
+  { id: 5, title: "Security Guard", category: "Security", salary: 11000, type: "Full Time", location: "Vikas Nagar, Lucknow", company: "SafeGuard Services", contact: "7711223344", desc: "Night + day shift available. Uniform provided. Accommodation for outstation candidates.", rating: 4.3, distance: "5.8 km", lat: 26.87, lng: 81.01, approved: true, postedBy: "employer", date: "Yesterday" },
+  { id: 6, title: "Kitchen Helper / Cook", category: "Cook", salary: 9500, type: "Full Time", location: "Chowk, Lucknow", company: "Tunday Kababi Hotel", contact: "9012345678", desc: "Help in kitchen. Must know basic cooking. Meals provided. Long-term job.", rating: 4.7, distance: "2.9 km", lat: 26.85, lng: 80.91, approved: true, postedBy: "employer", date: "4 hours ago" },
+  { id: 7, title: "Electrician", category: "Electrician", salary: 15000, type: "Full Time", location: "Mahanagar, Lucknow", company: "Bright Electric Works", contact: "9900112233", desc: "Experienced electrician for commercial & residential wiring work. Tools provided.", rating: 4.4, distance: "3.7 km", lat: 26.89, lng: 80.96, approved: true, postedBy: "employer", date: "Today" },
+  { id: 8, title: "Helper / Loader", category: "Helper", salary: 500, type: "Daily Wage", location: "Transport Nagar, Lucknow", company: "Om Logistics", contact: "8899001122", desc: "Loading/unloading goods from trucks. Daily payment 500-700. Must be physically fit.", rating: 4.1, distance: "6.2 km", lat: 26.83, lng: 80.90, approved: true, postedBy: "employer", date: "2 hours ago" }
 ];
 
-let jobs = [
-  {id:1,title:'Truck Driver',titleHi:'ट्रक ड्राइवर',category:'driver',salary:'18,000',salaryUnit:'month',location:'Lucknow',locationHi:'लखनऊ',employer:'Ramesh Logistics',contact:'9876543210',skill:'Driving License',skillHi:'ड्राइविंग लाइसेंस',desc:'Need experienced truck driver for goods transport.',descHi:'माल ढुलाई के लिए अनुभवी ट्रक ड्राइवर चाहिए।',postedDate:'2024-01-10',status:'approved',rating:4,applicants:[],featured:true},
-  {id:2,title:'Home Cleaner',titleHi:'घर की सफाई',category:'cleaning',salary:'8,000',salaryUnit:'month',location:'Kanpur',locationHi:'कानपुर',employer:'CleanHome Services',contact:'9123456789',skill:'Cleaning',skillHi:'सफाई का काम',desc:'House cleaning work, 6 days a week.',descHi:'घर की सफाई का काम, हफ्ते में 6 दिन।',postedDate:'2024-01-11',status:'approved',rating:4,applicants:[],featured:true},
-  {id:3,title:'Delivery Boy',titleHi:'डिलीवरी बॉय',category:'delivery',salary:'12,000',salaryUnit:'month',location:'Lucknow',locationHi:'लखनऊ',employer:'QuickDeliver',contact:'9988776655',skill:'Bike Riding',skillHi:'बाइक चलाना',desc:'Food and parcel delivery on bike.',descHi:'बाइक से खाना और पार्सल डिलीवरी।',postedDate:'2024-01-12',status:'approved',rating:3,applicants:[],featured:true},
-  {id:4,title:'Construction Helper',titleHi:'निर्माण मजदूर',category:'construction',salary:'500',salaryUnit:'day',location:'Agra',locationHi:'आगरा',employer:'BuildRight Pvt Ltd',contact:'9111222333',skill:'Physical Work',skillHi:'शारीरिक काम',desc:'Construction site helper needed for building work.',descHi:'इमारत निर्माण के लिए मजदूर चाहिए।',postedDate:'2024-01-09',status:'approved',rating:5,applicants:[],featured:false},
-  {id:5,title:'Cook / Chef',titleHi:'रसोइया / कुक',category:'cook',salary:'10,000',salaryUnit:'month',location:'Varanasi',locationHi:'वाराणसी',employer:'Shree Dhaba',contact:'9444555666',skill:'Cooking',skillHi:'खाना पकाना',desc:'Hindi food cooking for dhaba, breakfast to dinner.',descHi:'ढाबे के लिए खाना पकाने वाला चाहिए।',postedDate:'2024-01-08',status:'approved',rating:4,applicants:[],featured:false},
-  {id:6,title:'Security Guard',titleHi:'सुरक्षा गार्ड',category:'security',salary:'9,000',salaryUnit:'month',location:'Lucknow',locationHi:'लखनऊ',employer:'SafeZone Security',contact:'9222333444',skill:'Ex-Army/Fit Person',skillHi:'पूर्व सैनिक/स्वस्थ व्यक्ति',desc:'Night shift security guard for residential society.',descHi:'रिहायशी सोसायटी के लिए रात का सुरक्षा गार्ड।',postedDate:'2024-01-07',status:'approved',rating:3,applicants:[],featured:false},
-  {id:7,title:'Farming Worker',titleHi:'खेत मजदूर',category:'farming',salary:'350',salaryUnit:'day',location:'Allahabad',locationHi:'प्रयागराज',employer:'Gupta Farm',contact:'9555666777',skill:'Farm Work',skillHi:'खेती का काम',desc:'Seasonal farming labor for wheat and rice crops.',descHi:'गेहूं और चावल की फसल के लिए मजदूर।',postedDate:'2024-01-06',status:'approved',rating:4,applicants:[],featured:false},
-  {id:8,title:'House Helper',titleHi:'घरेलू नौकर',category:'helper',salary:'6,000',salaryUnit:'month',location:'Lucknow',locationHi:'लखनऊ',employer:'Sharma Family',contact:'9666777888',skill:'No Special Skill',skillHi:'कोई खास कौशल नहीं',desc:'Household chores help needed, timing flexible.',descHi:'घर के काम के लिए मदद चाहिए।',postedDate:'2024-01-05',status:'pending',rating:0,applicants:[],featured:false},
+const CATS = [
+  { name: "Driver", hindi: "ड्राइवर", emoji: "🚛" },
+  { name: "Cleaner", hindi: "सफाई", emoji: "🧹" },
+  { name: "Labour", hindi: "मजदूर", emoji: "🔨" },
+  { name: "Helper", hindi: "सहायक", emoji: "🤝" },
+  { name: "Delivery", hindi: "डिलीवरी", emoji: "📦" },
+  { name: "Security", hindi: "सुरक्षा", emoji: "🛡️" },
+  { name: "Cook", hindi: "रसोईया", emoji: "🍳" },
+  { name: "Electrician", hindi: "बिजली", emoji: "⚡" }
 ];
 
-let users = [
-  {id:1,name:'Ramesh Kumar',type:'seeker',mobile:'9000000001',location:'Lucknow',skills:'Driving',exp:'3 years',joined:'2024-01-01',status:'active'},
-  {id:2,name:'Priya Devi',type:'seeker',mobile:'9000000002',location:'Kanpur',skills:'Cleaning, Cooking',exp:'1 year',joined:'2024-01-02',status:'active'},
-  {id:3,name:'Rajesh Logistics',type:'employer',mobile:'9876543210',location:'Lucknow',joined:'2024-01-01',status:'active'},
+const NOTIFS = [
+  { icon: "🎉", title: "New job near you!", body: "Truck Driver vacancy in Gomti Nagar - ₹18,000/month", time: "5 min ago" },
+  { icon: "✅", title: "Application Viewed", body: "Gupta Family viewed your profile for House Cleaner", time: "1 hour ago" },
+  { icon: "📞", title: "Employer Called!", body: "SafeGuard Services wants to hire you. Check profile.", time: "3 hours ago" },
+  { icon: "🆕", title: "8 new jobs today", body: "New jobs added in your area. Apply now!", time: "Today" },
 ];
 
-// ---- TOAST ----
-function showToast(msg, duration=2500){
-  state.toast = msg;
-  render();
-  setTimeout(()=>{ state.toast=null; render(); }, duration);
+// ============ STATE ============
+let lang = "en";
+let currentUser = DB.getObj('currentUser');
+let currentEmployer = DB.getObj('currentEmployer');
+let selectedCat = "";
+let currentJobForApply = null;
+let userLat = null, userLng = null;
+let selectedJobForMap = null;
+
+// ============ INIT ============
+function init() {
+  // Seed jobs if empty
+  if (!DB.get('jobs').length) DB.set('jobs', JOBS_SEED);
+  if (!DB.get('workers').length) DB.set('workers', []);
+  if (!DB.get('employers').length) DB.set('employers', []);
+  if (!DB.get('applications').length) DB.set('applications', []);
+
+  renderCats();
+  renderJobs();
+  renderNotifications();
+  updateProfile();
 }
 
-// ---- RENDER ENGINE ----
-function render(){
-  document.getElementById('app').innerHTML = buildApp();
-  attachEvents();
-}
-
-function buildApp(){
-  return `
-    ${buildTopbar()}
-    <div class="app">
-      ${buildPage()}
-      ${state.userType && state.userType!=='admin' ? buildBottomNav() : ''}
+function renderCats() {
+  const el = document.getElementById('cats-grid');
+  el.innerHTML = CATS.map(c => `
+    <div class="cat-card ${selectedCat===c.name?'active':''}" onclick="filterByCat('${c.name}')">
+      <span class="emoji">${c.emoji}</span>
+      <div class="name">${c.name}</div>
+      <div class="hindi">${c.hindi}</div>
     </div>
-    ${state.toast ? `<div class="toast">${state.toast}</div>` : ''}
-    ${state.modal ? buildModal() : ''}
+  `).join('');
+}
+
+function filterByCat(cat) {
+  selectedCat = selectedCat === cat ? "" : cat;
+  renderCats();
+  renderJobs();
+}
+
+function filterJobs() {
+  renderJobs();
+}
+
+function renderJobs() {
+  const el = document.getElementById('jobs-list');
+  const search = (document.getElementById('search-input')?.value || "").toLowerCase();
+  let jobs = DB.get('jobs').filter(j => j.approved);
+  if (selectedCat) jobs = jobs.filter(j => j.category === selectedCat);
+  if (search) jobs = jobs.filter(j =>
+    j.title.toLowerCase().includes(search) ||
+    j.category.toLowerCase().includes(search) ||
+    j.location.toLowerCase().includes(search)
+  );
+
+  if (!jobs.length) {
+    el.innerHTML = `<div class="loading">😕 No jobs found. Try different search.</div>`;
+    return;
+  }
+
+  el.innerHTML = jobs.map(j => `
+    <div class="job-card" onclick="openJobDetail(${j.id})">
+      <div class="distance-badge">📍 ${j.distance || '?'}</div>
+      <div class="job-header">
+        <div>
+          <div class="job-title">${j.title}</div>
+          <div class="job-company">🏢 ${j.company} • ${j.date}</div>
+        </div>
+        <div class="job-salary">₹${j.salary.toLocaleString()}${j.type==='Daily Wage'?'/day':'/mo'}</div>
+      </div>
+      <div class="job-tags">
+        <span class="job-tag">📂 ${j.category}</span>
+        <span class="job-tag">⏱️ ${j.type}</span>
+        <span class="job-tag">📍 ${j.location.split(',')[0]}</span>
+        <span class="job-tag">⭐ ${j.rating}</span>
+      </div>
+      <div class="job-actions">
+        <button class="apply-btn" onclick="event.stopPropagation();quickApply(${j.id})">
+          ✅ Apply Now / आवेदन करें
+        </button>
+        <button class="call-btn" onclick="event.stopPropagation();callEmployer('${j.contact}')" title="Call">📞</button>
+        <button class="wa-btn" onclick="event.stopPropagation();whatsapp('${j.contact}','${j.title}')" title="WhatsApp">💬</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openJobDetail(id) {
+  const job = DB.get('jobs').find(j => j.id === id);
+  if (!job) return;
+  selectedJobForMap = job;
+  const el = document.getElementById('job-detail-content');
+  const apps = DB.get('applications').filter(a => a.jobId === id).length;
+
+  el.innerHTML = `
+    <div class="job-card" style="cursor:default;">
+      <div class="job-header">
+        <div>
+          <div class="job-title" style="font-size:20px;">${job.title}</div>
+          <div class="job-company">🏢 ${job.company}</div>
+        </div>
+        <div class="job-salary" style="font-size:16px;">₹${job.salary.toLocaleString()}${job.type==='Daily Wage'?'/day':'/mo'}</div>
+      </div>
+      <div class="job-tags">
+        <span class="job-tag">📂 ${job.category}</span>
+        <span class="job-tag">⏱️ ${job.type}</span>
+        <span class="job-tag">📅 ${job.date}</span>
+        <span class="job-tag">⭐ ${job.rating} rating</span>
+      </div>
+    </div>
+
+    <div style="background:white;border:1.5px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;">
+      <div style="font-weight:700;font-size:16px;margin-bottom:10px;">📍 Location</div>
+      <div style="font-size:15px;margin-bottom:14px;">${job.location}</div>
+      <button class="primary-btn" style="background:var(--secondary);" onclick="openModal('job-map');setJobMap('${job.location}','${job.distance||'?'}')">
+        🗺️ View on Map / Directions
+      </button>
+    </div>
+
+    <div style="background:white;border:1.5px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;">
+      <div style="font-weight:700;font-size:16px;margin-bottom:10px;">📋 Job Description</div>
+      <div style="font-size:15px;line-height:1.6;color:var(--text-muted);">${job.desc}</div>
+    </div>
+
+    <div style="background:#E8F5E9;border-radius:var(--radius);padding:18px;margin-bottom:14px;">
+      <div style="font-weight:700;margin-bottom:6px;">📊 Applications: ${apps} people applied</div>
+      <div class="rating-bar"><span style="font-size:12px;width:20px;">5</span><div class="bar"><div class="bar-fill" style="width:70%"></div></div></div>
+      <div class="rating-bar"><span style="font-size:12px;width:20px;">4</span><div class="bar"><div class="bar-fill" style="width:20%"></div></div></div>
+      <div class="rating-bar"><span style="font-size:12px;width:20px;">3</span><div class="bar"><div class="bar-fill" style="width:10%"></div></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+      <button class="apply-btn" style="font-size:14px;" onclick="quickApply(${job.id})">✅ Apply</button>
+      <button class="call-btn" style="border-radius:var(--radius-sm);width:100%;font-size:15px;" onclick="callEmployer('${job.contact}')">📞 Call</button>
+      <button class="wa-btn" style="border-radius:var(--radius-sm);width:100%;font-size:15px;" onclick="whatsapp('${job.contact}','${job.title}')">💬 WA</button>
+    </div>
+
+    <div class="emp-card">
+      <div class="emp-header">
+        <div class="emp-avatar">🏢</div>
+        <div>
+          <div class="emp-name">${job.company}</div>
+          <div class="emp-type">Employer</div>
+        </div>
+        <span class="verified-badge">✓ Verified</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-muted);">Posted ${job.date} • ${apps} applicants</div>
+    </div>
   `;
+  openPage('job-detail-page');
 }
 
-function buildTopbar(){
-  const isLoggedIn = !!state.user;
-  return `
-  <div class="topbar">
-    <div class="topbar-logo" onclick="navigate('home')" style="cursor:pointer">
-      🌉 <span>${t('appName')}</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <button class="lang-btn" onclick="toggleLang()">
-        ${state.lang==='hi'?'EN':'हिं'}
-      </button>
-      ${isLoggedIn ? `<button class="lang-btn" onclick="doLogout()">🚪</button>` : ''}
-    </div>
-  </div>`;
+function setJobMap(location, dist) {
+  document.getElementById('job-map-addr').textContent = location;
+  document.getElementById('job-map-dist').textContent = dist ? `${dist} from you` : '';
 }
 
-function buildBottomNav(){
-  const items = state.userType==='employer'
-    ? [{page:'home',icon:'🏠',label:t('home')},{page:'post-job',icon:'➕',label:t('postJob')},{page:'my-jobs',icon:'📋',label:t('myJobs')},{page:'profile',icon:'👤',label:t('profile')}]
-    : [{page:'home',icon:'🏠',label:t('home')},{page:'jobs',icon:'🔍',label:t('jobs')},{page:'applied',icon:'📝',label:t('appliedStatus')},{page:'profile',icon:'👤',label:t('profile')}];
-  return `
-  <nav class="bottom-nav">
-    ${items.map(i=>`
-      <div class="nav-item ${state.page===i.page?'active':''}" onclick="navigate('${i.page}')">
-        <div class="nav-icon">${i.icon}</div>
-        <div>${i.label}</div>
-      </div>
-    `).join('')}
-  </nav>`;
+function openJobInMaps() {
+  if (!selectedJobForMap) return;
+  const q = encodeURIComponent(selectedJobForMap.location);
+  window.open(`https://www.google.com/maps/search/${q}`, '_blank');
 }
 
-function buildPage(){
-  if(!state.user) return buildLandingPage();
-  if(state.userType==='admin') return buildAdminPage();
-  if(state.userType==='employer') return buildEmployerPage();
-  return buildSeekerPage();
+function getDirections() {
+  if (!selectedJobForMap) return;
+  const dst = encodeURIComponent(selectedJobForMap.location);
+  const origin = userLat ? `${userLat},${userLng}` : '';
+  window.open(`https://www.google.com/maps/dir/${origin}/${dst}`, '_blank');
 }
 
-// ========== LANDING PAGE ==========
-function buildLandingPage(){
-  if(state.page==='register') return buildRegisterPage();
-  if(state.page==='employer-register') return buildEmployerRegister();
-  return buildLoginPage();
-}
+// ============ AUTH ============
+function registerWorker() {
+  const name = document.getElementById('wr-name').value.trim();
+  const mobile = document.getElementById('wr-mobile').value.trim();
+  const skill = document.getElementById('wr-skill').value;
+  const city = document.getElementById('wr-city').value.trim();
+  const exp = document.getElementById('wr-exp').value;
+  const msg = document.getElementById('wr-msg');
 
-function buildLoginPage(){
-  return `
-  <div class="page">
-    <!-- Hero -->
-    <div style="text-align:center;padding:30px 0 20px">
-      <div style="font-size:64px">🌉</div>
-      <h1 style="font-family:var(--font);font-size:28px;font-weight:800;color:var(--saffron);margin:8px 0">${t('appName')}</h1>
-      <p style="color:var(--text-muted);font-size:15px">${t('appTag')}</p>
-    </div>
-
-    <!-- Stats quick view -->
-    <div class="stats-row">
-      <div class="stat-box"><div class="stat-num" style="color:var(--saffron)">${jobs.filter(j=>j.status==='approved').length}+</div><div class="stat-label">${t('totalJobs')}</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--green)">${users.length}+</div><div class="stat-label">${t('totalUsers')}</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--sky)">9</div><div class="stat-label">श्रेणियाँ</div></div>
-    </div>
-
-    <!-- Login Form -->
-    <div class="card">
-      <h2 style="font-family:var(--font);font-size:18px;font-weight:700;margin-bottom:16px;color:var(--text)">${t('login')}</h2>
-      <div class="form-group">
-        <label class="form-label">📱 ${t('mobile')}</label>
-        <input class="form-input" id="inp-mobile" type="tel" placeholder="9XXXXXXXXX" maxlength="10"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">🔒 ${t('password')}</label>
-        <input class="form-input" id="inp-pass" type="password" placeholder="••••••"/>
-      </div>
-      <button class="btn btn-primary" onclick="doLogin()">🚀 ${t('login')}</button>
-      <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted)">
-        Admin: 0000000000 / admin123
-      </div>
-    </div>
-
-    <!-- Register Options -->
-    <div style="margin-top:8px">
-      <div style="text-align:center;font-size:14px;color:var(--text-muted);margin-bottom:10px">${t('registerAs')}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <button class="btn btn-outline btn-sm" style="width:100%;padding:12px" onclick="navigate('register')">
-          👷 ${t('seeker')}
-        </button>
-        <button class="btn btn-secondary btn-sm" style="width:100%;padding:12px" onclick="navigate('employer-register')">
-          🏢 ${t('employer')}
-        </button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function buildRegisterPage(){
-  return `
-  <div class="page">
-    <button class="btn btn-sm" style="width:auto;margin-bottom:16px;background:none;color:var(--text-muted)" onclick="navigate('home')">${t('back')}</button>
-    <h2 style="font-family:var(--font);font-size:22px;font-weight:800;margin-bottom:4px">👷 ${t('seeker')} ${t('register')}</h2>
-    <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px">नौकरी पाने के लिए रजिस्टर करें</p>
-    <div class="card">
-      <div class="form-group"><label class="form-label">👤 ${t('name')}</label><input class="form-input" id="r-name" placeholder="राम कुमार"/></div>
-      <div class="form-group"><label class="form-label">📱 ${t('mobile')}</label><input class="form-input" id="r-mobile" type="tel" placeholder="9XXXXXXXXX" maxlength="10"/></div>
-      <div class="form-group"><label class="form-label">🎂 ${t('age')}</label><input class="form-input" id="r-age" type="number" placeholder="25"/></div>
-      <div class="form-group">
-        <label class="form-label">🛠️ ${t('skills')}</label>
-        <select class="form-input form-select" id="r-skill">
-          <option value="">-- कौशल चुनें --</option>
-          ${categories.map(c=>`<option value="${c.id}">${c.icon} ${c.name[state.lang]}</option>`).join('')}
-        </select>
-      </div>
-      <div class="form-group"><label class="form-label">📍 ${t('location')}</label><input class="form-input" id="r-loc" placeholder="लखनऊ"/></div>
-      <div class="form-group"><label class="form-label">💼 ${t('experience')}</label><input class="form-input" id="r-exp" placeholder="2 साल / नया"/></div>
-      <div class="form-group"><label class="form-label">🔒 ${t('password')}</label><input class="form-input" id="r-pass" type="password" placeholder="••••••"/></div>
-      <button class="btn btn-primary" onclick="doRegister('seeker')">✅ ${t('submit')}</button>
-    </div>
-  </div>`;
-}
-
-function buildEmployerRegister(){
-  return `
-  <div class="page">
-    <button class="btn btn-sm" style="width:auto;margin-bottom:16px;background:none;color:var(--text-muted)" onclick="navigate('home')">${t('back')}</button>
-    <h2 style="font-family:var(--font);font-size:22px;font-weight:800;margin-bottom:4px">🏢 ${t('employer')} ${t('register')}</h2>
-    <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px">नौकरी देने के लिए रजिस्टर करें</p>
-    <div class="card">
-      <div class="form-group"><label class="form-label">🏢 व्यवसाय का नाम</label><input class="form-input" id="e-name" placeholder="राम ट्रांसपोर्ट"/></div>
-      <div class="form-group"><label class="form-label">📱 ${t('mobile')}</label><input class="form-input" id="e-mobile" type="tel" placeholder="9XXXXXXXXX" maxlength="10"/></div>
-      <div class="form-group"><label class="form-label">📍 ${t('location')}</label><input class="form-input" id="e-loc" placeholder="लखनऊ"/></div>
-      <div class="form-group"><label class="form-label">🔒 ${t('password')}</label><input class="form-input" id="e-pass" type="password" placeholder="••••••"/></div>
-      <button class="btn btn-secondary" onclick="doRegister('employer')">✅ ${t('submit')}</button>
-    </div>
-  </div>`;
-}
-
-// ========== SEEKER PAGES ==========
-function buildSeekerPage(){
-  if(state.page==='jobs') return buildJobsPage();
-  if(state.page==='applied') return buildAppliedPage();
-  if(state.page==='profile') return buildSeekerProfile();
-  if(state.page==='job-detail') return buildJobDetail();
-  return buildSeekerHome();
-}
-
-function buildSeekerHome(){
-  const approved = jobs.filter(j=>j.status==='approved');
-  const featured = approved.filter(j=>j.featured);
-  return `
-  <div class="page">
-    <!-- Greeting -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div>
-        <div style="font-size:13px;color:var(--text-muted)">नमस्ते 🙏</div>
-        <div style="font-family:var(--font);font-size:20px;font-weight:700">${state.user.name}</div>
-      </div>
-      <button onclick="navigate('notifications')" style="background:none;border:none;font-size:26px;position:relative">
-        🔔<span style="position:absolute;top:-2px;right:-2px;background:var(--saffron);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700">3</span>
-      </button>
-    </div>
-
-    <!-- Search with voice -->
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <div class="search-wrap" style="flex:1;margin-bottom:0">
-        <input class="search-input" id="search-inp" placeholder="${t('searchPlaceholder')}" value="${state.searchQuery}" oninput="state.searchQuery=this.value;state.page='jobs';render()"/>
-        <span class="search-icon">🔍</span>
-      </div>
-      <button class="voice-btn" id="voice-btn" onclick="startVoiceSearch()" title="${t('voiceSearch')}">🎤</button>
-    </div>
-
-    <!-- Hero Banner -->
-    <div class="hero">
-      <h2>📢 ${approved.length}+ नौकरियाँ उपलब्ध हैं!</h2>
-      <p>अभी आवेदन करें और काम शुरू करें</p>
-    </div>
-
-    <!-- Categories -->
-    <div class="section-title">🗂️ ${t('categories')}</div>
-    <div class="category-grid">
-      ${categories.map(c=>`
-        <div class="cat-card ${state.filterCategory===c.id?'active':''}" style="background:${c.color}" onclick="filterByCategory('${c.id}')">
-          <div class="cat-icon">${c.icon}</div>
-          <div class="cat-name">${c.name[state.lang]}</div>
-        </div>
-      `).join('')}
-    </div>
-
-    <!-- Featured Jobs -->
-    <div class="section-title" style="margin-top:8px">⭐ ${t('featuredJobs')}</div>
-    ${featured.length ? featured.map(j=>buildJobCard(j)).join('') : `<div class="empty"><div class="empty-icon">🔍</div><h3>${t('noJobs')}</h3></div>`}
-
-    <button class="btn btn-outline" onclick="navigate('jobs')" style="margin-top:4px">सभी नौकरियाँ देखें →</button>
-  </div>`;
-}
-
-function buildJobsPage(){
-  let filtered = jobs.filter(j=>j.status==='approved');
-  if(state.filterCategory && state.filterCategory!=='all'){
-    filtered = filtered.filter(j=>j.category===state.filterCategory);
+  if (!name || !mobile || !skill || !city) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Please fill all fields</div>`;
+    return;
   }
-  if(state.searchQuery){
-    const q = state.searchQuery.toLowerCase();
-    filtered = filtered.filter(j=>
-      j.title.toLowerCase().includes(q) ||
-      j.titleHi.includes(q) ||
-      j.location.toLowerCase().includes(q) ||
-      j.locationHi.includes(q) ||
-      j.skill.toLowerCase().includes(q) ||
-      j.skillHi.includes(q)
-    );
+  if (mobile.length < 10) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Invalid mobile number</div>`;
+    return;
   }
-  return `
-  <div class="page">
-    <div class="section-title">🔍 नौकरी खोजें</div>
-    <div style="display:flex;gap:8px;margin-bottom:12px">
-      <div class="search-wrap" style="flex:1;margin-bottom:0">
-        <input class="search-input" id="search-inp" placeholder="${t('searchPlaceholder')}" value="${state.searchQuery}" oninput="state.searchQuery=this.value;render()"/>
-        <span class="search-icon">🔍</span>
-      </div>
-      <button class="voice-btn" onclick="startVoiceSearch()">🎤</button>
-    </div>
-    <!-- Category Filter -->
-    <div style="overflow-x:auto;white-space:nowrap;margin-bottom:14px;padding-bottom:4px">
-      <button class="badge ${state.filterCategory==='all'?'badge-saffron':'badge-gray'}" style="margin-right:6px;padding:6px 14px;cursor:pointer;font-size:13px" onclick="state.filterCategory='all';render()">🌟 सभी</button>
-      ${categories.map(c=>`<button class="badge ${state.filterCategory===c.id?'badge-saffron':'badge-gray'}" style="margin-right:6px;padding:6px 14px;cursor:pointer;font-size:13px" onclick="state.filterCategory='${c.id}';render()">${c.icon} ${c.name[state.lang]}</button>`).join('')}
-    </div>
-    ${filtered.length ? filtered.map(j=>buildJobCard(j)).join('') : `<div class="empty"><div class="empty-icon">🔍</div><h3>${t('noJobs')}</h3><p style="color:var(--text-muted)">दूसरे शब्द से खोजें</p></div>`}
-  </div>`;
-}
 
-function buildJobCard(job){
-  const cat = categories.find(c=>c.id===job.category)||categories[8];
-  const isApplied = state.appliedJobs.includes(job.id);
-  const title = state.lang==='hi' ? job.titleHi : job.title;
-  const location = state.lang==='hi' ? job.locationHi : job.location;
-  const skill = state.lang==='hi' ? job.skillHi : job.skill;
-  const stars = job.rating>0 ? '⭐'.repeat(job.rating) : '';
-  return `
-  <div class="job-card" onclick="openJobDetail(${job.id})" style="cursor:pointer">
-    <div class="job-card-header">
-      <div class="job-icon-wrap" style="background:${cat.color}">${cat.icon}</div>
-      <div style="flex:1">
-        <div class="job-title">${title}</div>
-        <div class="job-company">${job.employer}</div>
-        ${stars ? `<div style="font-size:12px;margin-top:2px">${stars}</div>` : ''}
-      </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div style="font-family:var(--font);font-size:16px;font-weight:700;color:var(--green)">₹${job.salary}</div>
-        <div style="font-size:11px;color:var(--text-muted)">/${state.lang==='hi'?'माह':'mo'}</div>
-      </div>
-    </div>
-    <div class="job-meta">
-      <span class="job-meta-item">📍 ${location}</span>
-      <span class="job-meta-item">🛠️ ${skill}</span>
-    </div>
-    <div class="job-actions" onclick="event.stopPropagation()">
-      <button class="btn btn-sm ${isApplied?'btn-outline':'btn-primary'}" style="flex:1" onclick="applyJob(${job.id})">
-        ${isApplied ? t('applied') : t('apply')}
-      </button>
-      <button class="btn btn-sm btn-whatsapp" onclick="contactWhatsApp('${job.contact}','${title}')">💬 ${t('whatsapp')}</button>
-      <button class="btn btn-sm btn-call" onclick="contactCall('${job.contact}')">📞</button>
-    </div>
-  </div>`;
-}
-
-function buildJobDetail(){
-  const job = jobs.find(j=>j.id===state.selectedJobId);
-  if(!job) return `<div class="page"><button class="btn btn-sm" style="width:auto;background:none;color:var(--text-muted)" onclick="navigate('jobs')">${t('back')}</button></div>`;
-  const cat = categories.find(c=>c.id===job.category)||categories[8];
-  const isApplied = state.appliedJobs.includes(job.id);
-  const title = state.lang==='hi' ? job.titleHi : job.title;
-  const location = state.lang==='hi' ? job.locationHi : job.location;
-  const skill = state.lang==='hi' ? job.skillHi : job.skill;
-  const desc = state.lang==='hi' ? job.descHi : job.desc;
-  return `
-  <div class="page">
-    <button class="btn btn-sm" style="width:auto;background:none;color:var(--text-muted);padding:0;margin-bottom:12px" onclick="navigate('jobs')">${t('back')}</button>
-    <div class="card" style="text-align:center;padding:24px">
-      <div style="font-size:56px;margin-bottom:8px">${cat.icon}</div>
-      <h2 style="font-family:var(--font);font-size:22px;font-weight:800;margin-bottom:4px">${title}</h2>
-      <div style="color:var(--text-muted)">${job.employer}</div>
-      ${job.rating>0?`<div style="margin-top:6px">${'⭐'.repeat(job.rating)} (${job.rating}/5)</div>`:''}
-    </div>
-    <div class="card">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div><div style="font-size:12px;color:var(--text-muted);font-weight:600">💰 वेतन</div><div style="font-size:20px;font-weight:700;color:var(--green);font-family:var(--font)">₹${job.salary}</div></div>
-        <div><div style="font-size:12px;color:var(--text-muted);font-weight:600">📍 स्थान</div><div style="font-size:16px;font-weight:600">${location}</div></div>
-        <div><div style="font-size:12px;color:var(--text-muted);font-weight:600">🛠️ कौशल</div><div style="font-size:15px;font-weight:500">${skill}</div></div>
-        <div><div style="font-size:12px;color:var(--text-muted);font-weight:600">📅 पोस्ट</div><div style="font-size:14px">${job.postedDate}</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="section-title" style="font-size:15px">📄 विवरण</div>
-      <p style="color:var(--text-muted);line-height:1.7">${desc}</p>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
-      <button class="btn ${isApplied?'btn-outline':'btn-primary'}" onclick="applyJob(${job.id})">
-        ${isApplied ? '✅ '+t('applied') : '🚀 '+t('apply')}
-      </button>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <button class="btn btn-whatsapp" onclick="contactWhatsApp('${job.contact}','${title}')">💬 ${t('whatsapp')}</button>
-        <button class="btn btn-call" onclick="contactCall('${job.contact}')">📞 ${t('call')}</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function buildAppliedPage(){
-  const myApps = state.appliedJobs.map(id=>{
-    const job = jobs.find(j=>j.id===id);
-    return job ? {job,status:['pending','pending','approved'][Math.floor(Math.random()*3)]} : null;
-  }).filter(Boolean);
-  return `
-  <div class="page">
-    <div class="section-title">📝 ${t('appliedStatus')}</div>
-    ${myApps.length===0 ? `
-      <div class="empty">
-        <div class="empty-icon">📋</div>
-        <h3>${t('noApps')}</h3>
-        <p style="color:var(--text-muted);margin-bottom:16px">अभी नौकरी के लिए आवेदन करें</p>
-        <button class="btn btn-primary" style="width:auto;padding:12px 24px" onclick="navigate('jobs')">नौकरी देखें</button>
-      </div>
-    ` : myApps.map(a=>`
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div>
-            <div style="font-weight:700;font-size:16px">${state.lang==='hi'?a.job.titleHi:a.job.title}</div>
-            <div style="font-size:13px;color:var(--text-muted)">${a.job.employer}</div>
-            <div style="font-size:13px;color:var(--text-muted);margin-top:4px">📍 ${state.lang==='hi'?a.job.locationHi:a.job.location}</div>
-          </div>
-          <span class="status-${a.status}">${a.status==='pending'?t('pending'):a.status==='approved'?t('approved'):t('rejected')}</span>
-        </div>
-      </div>
-    `).join('')}
-  </div>`;
-}
-
-function buildSeekerProfile(){
-  const u = state.user;
-  return `
-  <div class="page">
-    <div class="profile-header">
-      <div style="display:flex;justify-content:center;margin-bottom:12px">
-        <div class="avatar-circle">${u.name.charAt(0).toUpperCase()}</div>
-      </div>
-      <h2 style="font-family:var(--font);font-size:22px;font-weight:800">${u.name}</h2>
-      <p style="color:var(--text-muted)">${u.mobile}</p>
-      <span class="badge badge-green">👷 ${t('seeker')}</span>
-    </div>
-    <div class="card">
-      <div style="display:grid;gap:12px">
-        ${buildProfileRow('📍',t('location'),u.location||'—')}
-        ${buildProfileRow('🛠️',t('skills'),u.skills||'—')}
-        ${buildProfileRow('💼',t('experience'),u.exp||'—')}
-        ${buildProfileRow('📱',t('mobile'),u.mobile)}
-      </div>
-    </div>
-    <div class="card">
-      <div class="section-title" style="font-size:15px">⚙️ ${t('settings')}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-light)">
-        <span>🌐 ${state.lang==='hi'?'Language / भाषा':'Language / भाषा'}</span>
-        <button class="lang-btn" onclick="toggleLang()">${state.lang==='hi'?'Switch to English':'हिंदी में बदलें'}</button>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
-        <span>🔔 ${t('notifications')}</span>
-        <span class="badge badge-green">ON</span>
-      </div>
-    </div>
-    <button class="btn btn-danger" style="margin-top:8px" onclick="doLogout()">🚪 ${t('logout')}</button>
-  </div>`;
-}
-
-function buildProfileRow(icon, label, value){
-  return `
-  <div style="display:flex;align-items:center;gap:10px">
-    <span style="font-size:20px;width:28px">${icon}</span>
-    <div>
-      <div style="font-size:12px;color:var(--text-muted);font-weight:600">${label}</div>
-      <div style="font-size:15px;font-weight:500">${value}</div>
-    </div>
-  </div>`;
-}
-
-// ========== EMPLOYER PAGES ==========
-function buildEmployerPage(){
-  if(state.page==='post-job') return buildPostJobPage();
-  if(state.page==='my-jobs') return buildMyJobsPage();
-  if(state.page==='view-applicants') return buildViewApplicants();
-  if(state.page==='profile') return buildEmployerProfile();
-  return buildEmployerHome();
-}
-
-function buildEmployerHome(){
-  const myJobs = jobs.filter(j=>j.employerId===state.user.id);
-  const totalApplicants = myJobs.reduce((a,j)=>a+(j.applicants||[]).length,0);
-  return `
-  <div class="page">
-    <div style="margin-bottom:16px">
-      <div style="font-size:13px;color:var(--text-muted)">नमस्ते 🙏</div>
-      <div style="font-family:var(--font);font-size:20px;font-weight:700">${state.user.name}</div>
-    </div>
-    <div class="stats-row">
-      <div class="stat-box"><div class="stat-num" style="color:var(--saffron)">${myJobs.length}</div><div class="stat-label">पोस्ट की</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--green)">${myJobs.filter(j=>j.status==='approved').length}</div><div class="stat-label">मंजूर</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--sky)">${totalApplicants}</div><div class="stat-label">आवेदक</div></div>
-    </div>
-    <button class="btn btn-primary" onclick="navigate('post-job')" style="margin-bottom:16px">➕ ${t('postJob')}</button>
-    <div class="section-title">📋 हाल की नौकरियाँ</div>
-    ${myJobs.length===0 ? `<div class="empty"><div class="empty-icon">📋</div><h3>अभी कोई नौकरी नहीं</h3></div>` :
-      myJobs.slice(0,3).map(j=>buildEmployerJobCard(j)).join('')}
-    ${myJobs.length>3 ? `<button class="btn btn-outline" onclick="navigate('my-jobs')">सभी देखें</button>` : ''}
-  </div>`;
-}
-
-function buildEmployerJobCard(job){
-  const title = state.lang==='hi'?job.titleHi:job.title;
-  return `
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:start">
-      <div style="flex:1">
-        <div style="font-weight:700;font-size:16px">${title}</div>
-        <div style="font-size:13px;color:var(--text-muted);margin-top:4px">₹${job.salary} • ${state.lang==='hi'?job.locationHi:job.location}</div>
-      </div>
-      <span class="status-${job.status}">${job.status==='approved'?t('approved'):job.status==='rejected'?t('rejected'):t('pending')}</span>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:10px">
-      <button class="btn btn-sm btn-sky" style="flex:1" onclick="state.selectedJobId=${job.id};navigate('view-applicants')">👥 ${(job.applicants||[]).length} ${t('applicants')}</button>
-      <button class="btn btn-sm btn-outline" onclick="deleteJob(${job.id})">🗑️</button>
-    </div>
-  </div>`;
-}
-
-function buildPostJobPage(){
-  return `
-  <div class="page">
-    <button class="btn btn-sm" style="width:auto;background:none;color:var(--text-muted);padding:0;margin-bottom:12px" onclick="navigate('home')">${t('back')}</button>
-    <h2 style="font-family:var(--font);font-size:22px;font-weight:800;margin-bottom:16px">➕ ${t('postJob')}</h2>
-    <div class="card">
-      <div class="form-group"><label class="form-label">📋 ${t('jobTitle')}</label><input class="form-input" id="j-title" placeholder="जैसे: ट्रक ड्राइवर"/></div>
-      <div class="form-group"><label class="form-label">🗂️ श्रेणी</label>
-        <select class="form-input form-select" id="j-cat">
-          ${categories.map(c=>`<option value="${c.id}">${c.icon} ${c.name[state.lang]}</option>`).join('')}
-        </select>
-      </div>
-      <div class="form-group"><label class="form-label">💰 ${t('salary')} (₹)</label><input class="form-input" id="j-salary" type="number" placeholder="10000"/></div>
-      <div class="form-group"><label class="form-label">📍 ${t('location')}</label><input class="form-input" id="j-loc" placeholder="लखनऊ"/></div>
-      <div class="form-group"><label class="form-label">🛠️ ${t('skill')}</label><input class="form-input" id="j-skill" placeholder="ड्राइविंग लाइसेंस / कोई नहीं"/></div>
-      <div class="form-group"><label class="form-label">📱 ${t('contact')}</label><input class="form-input" id="j-contact" type="tel" placeholder="9XXXXXXXXX"/></div>
-      <div class="form-group"><label class="form-label">📄 ${t('desc')}</label><textarea class="form-input" id="j-desc" rows="3" placeholder="नौकरी का विवरण..."></textarea></div>
-      <button class="btn btn-primary" onclick="postJob()">✅ ${t('postJob')}</button>
-    </div>
-  </div>`;
-}
-
-function buildMyJobsPage(){
-  const myJobs = jobs.filter(j=>j.employerId===state.user.id);
-  return `
-  <div class="page">
-    <div class="section-title">📋 ${t('myJobs')}</div>
-    ${myJobs.length===0 ? `<div class="empty"><div class="empty-icon">📋</div><h3>अभी कोई नौकरी नहीं</h3></div>` : myJobs.map(j=>buildEmployerJobCard(j)).join('')}
-    <button class="btn btn-primary" onclick="navigate('post-job')">➕ नई नौकरी पोस्ट करें</button>
-  </div>`;
-}
-
-function buildViewApplicants(){
-  const job = jobs.find(j=>j.id===state.selectedJobId);
-  if(!job) return `<div class="page"><button onclick="navigate('my-jobs')">${t('back')}</button></div>`;
-  const title = state.lang==='hi'?job.titleHi:job.title;
-  const applicantData = (job.applicants||[]).map(uid=>users.find(u=>u.id===uid)).filter(Boolean);
-  return `
-  <div class="page">
-    <button class="btn btn-sm" style="width:auto;background:none;color:var(--text-muted);padding:0;margin-bottom:12px" onclick="navigate('my-jobs')">${t('back')}</button>
-    <div class="section-title">👥 ${title} - ${t('applicants')}</div>
-    ${applicantData.length===0 ? `<div class="empty"><div class="empty-icon">👥</div><h3>अभी कोई आवेदक नहीं</h3></div>` :
-      applicantData.map(u=>`
-      <div class="card">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div class="avatar-circle" style="width:44px;height:44px;font-size:18px">${u.name.charAt(0)}</div>
-          <div style="flex:1">
-            <div style="font-weight:700">${u.name}</div>
-            <div style="font-size:13px;color:var(--text-muted)">${u.skills||'—'} • ${u.location||'—'}</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="btn btn-sm btn-whatsapp" style="flex:1" onclick="contactWhatsApp('${u.mobile}','${title}')">💬 WhatsApp</button>
-          <button class="btn btn-sm btn-call" onclick="contactCall('${u.mobile}')">📞 Call</button>
-        </div>
-      </div>
-    `).join('')}
-  </div>`;
-}
-
-function buildEmployerProfile(){
-  const u = state.user;
-  return `
-  <div class="page">
-    <div class="profile-header">
-      <div style="display:flex;justify-content:center;margin-bottom:12px">
-        <div class="avatar-circle">${u.name.charAt(0).toUpperCase()}</div>
-      </div>
-      <h2 style="font-family:var(--font);font-size:22px;font-weight:800">${u.name}</h2>
-      <p style="color:var(--text-muted)">${u.mobile}</p>
-      <span class="badge badge-blue">🏢 ${t('employer')}</span>
-    </div>
-    <div class="card">
-      ${buildProfileRow('📍',t('location'),u.location||'—')}
-    </div>
-    <button class="btn btn-danger" style="margin-top:8px" onclick="doLogout()">🚪 ${t('logout')}</button>
-  </div>`;
-}
-
-// ========== ADMIN PAGES ==========
-function buildAdminPage(){
-  return `
-  <div class="page" style="padding-bottom:20px">
-    <div class="admin-header">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:36px">🛡️</span>
-        <div>
-          <div style="font-family:var(--font);font-size:20px;font-weight:800">${t('admin')}</div>
-          <div style="font-size:13px;opacity:0.8">Rozgar Setu Dashboard</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Analytics -->
-    <div class="section-title">📊 ${t('analytics')}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-      <div class="admin-stat"><div class="stat-num" style="color:var(--saffron)">${jobs.length}</div><div class="stat-label">कुल नौकरियाँ</div></div>
-      <div class="admin-stat" style="border-color:var(--green)"><div class="stat-num" style="color:var(--green)">${jobs.filter(j=>j.status==='approved').length}</div><div class="stat-label">मंजूर नौकरियाँ</div></div>
-      <div class="admin-stat" style="border-color:var(--sky)"><div class="stat-num" style="color:var(--sky)">${users.length}</div><div class="stat-label">कुल उपयोगकर्ता</div></div>
-      <div class="admin-stat" style="border-color:#F57F17"><div class="stat-num" style="color:#F57F17">${jobs.filter(j=>j.status==='pending').length}</div><div class="stat-label">पेंडिंग</div></div>
-    </div>
-
-    <!-- Tab Navigation -->
-    <div class="tabs">
-      <div class="tab ${state.adminTab==='jobs'?'active':''}" onclick="state.adminTab='jobs';render()">🗂️ नौकरियाँ</div>
-      <div class="tab ${state.adminTab==='users'?'active':''}" onclick="state.adminTab='users';render()">👥 उपयोगकर्ता</div>
-      <div class="tab ${state.adminTab==='cats'?'active':''}" onclick="state.adminTab='cats';render()">🗃️ श्रेणी</div>
-    </div>
-
-    ${(state.adminTab||'jobs')==='jobs' ? buildAdminJobs() : ''}
-    ${state.adminTab==='users' ? buildAdminUsers() : ''}
-    ${state.adminTab==='cats' ? buildAdminCategories() : ''}
-
-    <button class="btn btn-danger" style="margin-top:16px" onclick="doLogout()">🚪 ${t('logout')}</button>
-  </div>`;
-}
-
-function buildAdminJobs(){
-  return `
-  <div>
-    <div class="section-title">🗂️ सभी नौकरियाँ</div>
-    ${jobs.map(job=>`
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
-        <div>
-          <div style="font-weight:700;font-size:15px">${job.title}</div>
-          <div style="font-size:12px;color:var(--text-muted)">${job.employer} • ${job.location} • ₹${job.salary}</div>
-        </div>
-        <span class="status-${job.status}">${job.status}</span>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        ${job.status!=='approved' ? `<button class="btn btn-sm btn-secondary" onclick="adminApproveJob(${job.id})">${t('approve')}</button>` : ''}
-        ${job.status!=='rejected' ? `<button class="btn btn-sm" style="background:#F57F17;color:white;padding:6px 12px;font-size:13px;border-radius:6px" onclick="adminRejectJob(${job.id})">${t('reject')}</button>` : ''}
-        <button class="btn btn-sm btn-danger" onclick="adminDeleteJob(${job.id})">${t('delete')}</button>
-      </div>
-    </div>`).join('')}
-    <div class="section-title" style="margin-top:16px">➕ नई नौकरी जोड़ें</div>
-    <div class="card">
-      <div class="form-group"><label class="form-label">📋 Job Title (English)</label><input class="form-input" id="aj-title" placeholder="Truck Driver"/></div>
-      <div class="form-group"><label class="form-label">📋 Job Title (Hindi)</label><input class="form-input" id="aj-titlehi" placeholder="ट्रक ड्राइवर"/></div>
-      <div class="form-group"><label class="form-label">🗂️ Category</label>
-        <select class="form-input form-select" id="aj-cat">${categories.map(c=>`<option value="${c.id}">${c.icon} ${c.name.en}</option>`).join('')}</select>
-      </div>
-      <div class="form-group"><label class="form-label">💰 Salary</label><input class="form-input" id="aj-salary" placeholder="10000"/></div>
-      <div class="form-group"><label class="form-label">📍 Location</label><input class="form-input" id="aj-loc" placeholder="Lucknow"/></div>
-      <div class="form-group"><label class="form-label">🏢 Employer</label><input class="form-input" id="aj-emp" placeholder="Company Name"/></div>
-      <div class="form-group"><label class="form-label">📱 Contact</label><input class="form-input" id="aj-contact" placeholder="9XXXXXXXXX"/></div>
-      <button class="btn btn-primary" onclick="adminAddJob()">➕ Add Job</button>
-    </div>
-  </div>`;
-}
-
-function buildAdminUsers(){
-  return `
-  <div>
-    <div class="section-title">👥 सभी उपयोगकर्ता</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>नाम</th><th>प्रकार</th><th>स्थान</th><th>कार्य</th></tr></thead>
-        <tbody>
-          ${users.map(u=>`
-          <tr>
-            <td><div style="font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--text-muted)">${u.mobile}</div></td>
-            <td><span class="badge ${u.type==='seeker'?'badge-green':'badge-blue'}">${u.type==='seeker'?'👷':'🏢'} ${u.type}</span></td>
-            <td style="font-size:13px">${u.location||'—'}</td>
-            <td><button class="btn btn-sm btn-danger" onclick="adminDeleteUser(${u.id})">🗑️</button></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  </div>`;
-}
-
-function buildAdminCategories(){
-  return `
-  <div>
-    <div class="section-title">🗃️ श्रेणियाँ प्रबंधित करें</div>
-    <div class="category-grid">
-      ${categories.map(c=>`
-        <div class="cat-card" style="background:${c.color}">
-          <div class="cat-icon">${c.icon}</div>
-          <div class="cat-name">${c.name.hi}</div>
-          <div style="font-size:11px;color:var(--text-muted)">${c.name.en}</div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="card" style="margin-top:8px">
-      <div style="font-size:15px;font-weight:600;margin-bottom:12px">➕ नई श्रेणी जोड़ें</div>
-      <div class="form-group"><label class="form-label">नाम (English)</label><input class="form-input" id="nc-en" placeholder="e.g. Painter"/></div>
-      <div class="form-group"><label class="form-label">नाम (Hindi)</label><input class="form-input" id="nc-hi" placeholder="जैसे: पेंटर"/></div>
-      <div class="form-group"><label class="form-label">Icon (Emoji)</label><input class="form-input" id="nc-icon" placeholder="🎨"/></div>
-      <button class="btn btn-primary" onclick="adminAddCategory()">➕ Add Category</button>
-    </div>
-  </div>`;
-}
-
-// ========== ACTIONS ========== 
-
-function navigate(page){
-  state.page = page;
-  if(page==='home' && state.userType==='admin') state.adminTab='jobs';
-  render();
-  window.scrollTo(0,0);
-}
-
-function toggleLang(){
-  state.lang = state.lang==='hi' ? 'en' : 'hi';
-  render();
-}
-
-function filterByCategory(cat){
-  state.filterCategory = cat;
-  state.page = 'jobs';
-  render();
-}
-
-function openJobDetail(id){
-  state.selectedJobId = id;
-  state.page = 'job-detail';
-  render();
-  window.scrollTo(0,0);
-}
-
-function applyJob(id){
-  if(!state.appliedJobs.includes(id)){
-    state.appliedJobs.push(id);
-    const job = jobs.find(j=>j.id===id);
-    if(job){ job.applicants = job.applicants||[]; if(!job.applicants.includes(state.user.id)) job.applicants.push(state.user.id); }
-    showToast(state.lang==='hi'?'✅ आवेदन सफल!':'✅ Applied successfully!');
-    render();
-  } else {
-    showToast(state.lang==='hi'?'पहले से आवेदन किया है':'Already applied');
+  const workers = DB.get('workers');
+  if (workers.find(w => w.mobile === mobile)) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Mobile already registered</div>`;
+    return;
   }
+
+  const worker = { id: Date.now(), name, mobile, skill, city, exp, applied: [], rating: 4.8, joinDate: new Date().toLocaleDateString() };
+  workers.push(worker);
+  DB.set('workers', workers);
+  DB.setObj('currentUser', worker);
+  currentUser = worker;
+
+  closeModal('modal-worker-register');
+  updateProfile();
+  showToast(`✅ Welcome ${name}! Registered successfully.`);
 }
 
-function contactWhatsApp(number, jobTitle){
-  const msg = encodeURIComponent(`नमस्ते! मैं "${jobTitle}" नौकरी के लिए आवेदन करना चाहता हूँ। - Rozgar Setu`);
-  window.open(`https://wa.me/91${number}?text=${msg}`,'_blank');
-}
+function loginWorker() {
+  const mobile = document.getElementById('wl-mobile').value.trim();
+  const msg = document.getElementById('wl-msg');
+  const workers = DB.get('workers');
+  const w = workers.find(w => w.mobile === mobile);
 
-function contactCall(number){
-  window.open(`tel:+91${number}`,'_blank');
-}
-
-function doLogin(){
-  const mobile = document.getElementById('inp-mobile')?.value?.trim();
-  const pass = document.getElementById('inp-pass')?.value?.trim();
-  if(!mobile||!pass){ showToast('⚠️ सभी जानकारी भरें'); return; }
-  if(mobile==='0000000000'&&pass==='admin123'){
-    state.user={id:0,name:'Admin',mobile:'0000000000'};
-    state.userType='admin'; state.page='home'; state.adminTab='jobs';
-    showToast('✅ Admin Login Successful');
-    render(); return;
+  if (!w) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Mobile not found. Please register first.</div>`;
+    return;
   }
-  const found = users.find(u=>u.mobile===mobile);
-  if(found){
-    state.user={...found}; state.userType=found.type;
-    state.page='home'; state.appliedJobs=[];
-    showToast(`✅ ${t('welcome')} ${found.name}!`);
-    render();
-  } else { showToast('❌ मोबाइल नंबर नहीं मिला'); }
+
+  DB.setObj('currentUser', w);
+  currentUser = w;
+  closeModal('modal-worker-login');
+  updateProfile();
+  showToast(`✅ Welcome back, ${w.name}!`);
 }
 
-function doRegister(type){
-  if(type==='seeker'){
-    const name=document.getElementById('r-name')?.value?.trim();
-    const mobile=document.getElementById('r-mobile')?.value?.trim();
-    const age=document.getElementById('r-age')?.value?.trim();
-    const skill=document.getElementById('r-skill')?.value;
-    const loc=document.getElementById('r-loc')?.value?.trim();
-    const exp=document.getElementById('r-exp')?.value?.trim();
-    if(!name||!mobile||!age||!skill||!loc){ showToast('⚠️ सभी जानकारी भरें'); return; }
-    const newUser={id:users.length+1,name,mobile,type:'seeker',location:loc,skills:skill,exp,joined:new Date().toISOString().slice(0,10),status:'active'};
-    users.push(newUser);
-    state.user=newUser; state.userType='seeker'; state.page='home'; state.appliedJobs=[];
-    showToast(`✅ ${t('welcome')} ${name}!`); render();
-  } else {
-    const name=document.getElementById('e-name')?.value?.trim();
-    const mobile=document.getElementById('e-mobile')?.value?.trim();
-    const loc=document.getElementById('e-loc')?.value?.trim();
-    if(!name||!mobile||!loc){ showToast('⚠️ सभी जानकारी भरें'); return; }
-    const newUser={id:users.length+1,name,mobile,type:'employer',location:loc,joined:new Date().toISOString().slice(0,10),status:'active'};
-    users.push(newUser);
-    state.user=newUser; state.userType='employer'; state.page='home';
-    showToast(`✅ ${t('welcome')} ${name}!`); render();
+function registerEmployer() {
+  const name = document.getElementById('er-name').value.trim();
+  const mobile = document.getElementById('er-mobile').value.trim();
+  const type = document.getElementById('er-type').value;
+  const city = document.getElementById('er-city').value.trim();
+  const msg = document.getElementById('er-msg');
+
+  if (!name || !mobile || !city) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Please fill all fields</div>`;
+    return;
   }
+
+  const employers = DB.get('employers');
+  if (employers.find(e => e.mobile === mobile)) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Mobile already registered</div>`;
+    return;
+  }
+
+  const emp = { id: Date.now(), name, mobile, type, city, verified: true, joinDate: new Date().toLocaleDateString() };
+  employers.push(emp);
+  DB.set('employers', employers);
+  DB.setObj('currentEmployer', emp);
+  currentEmployer = emp;
+
+  closeModal('modal-employer-register');
+  openEmployerDashboard();
+  showToast(`✅ Welcome ${name}! Post your first job now.`);
 }
 
-function doLogout(){
-  state.user=null; state.userType=null; state.page='home';
-  state.appliedJobs=[]; state.filterCategory='all'; state.searchQuery='';
-  render();
+function loginEmployer() {
+  const mobile = document.getElementById('el-mobile').value.trim();
+  const msg = document.getElementById('el-msg');
+  const employers = DB.get('employers');
+  const e = employers.find(e => e.mobile === mobile);
+
+  if (!e) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Not registered. Please register first.</div>`;
+    return;
+  }
+
+  DB.setObj('currentEmployer', e);
+  currentEmployer = e;
+  closeModal('modal-employer-login');
+  openEmployerDashboard();
 }
 
-function postJob(){
-  const title=document.getElementById('j-title')?.value?.trim();
-  const cat=document.getElementById('j-cat')?.value;
-  const salary=document.getElementById('j-salary')?.value?.trim();
-  const loc=document.getElementById('j-loc')?.value?.trim();
-  const skill=document.getElementById('j-skill')?.value?.trim();
-  const contact=document.getElementById('j-contact')?.value?.trim();
-  const desc=document.getElementById('j-desc')?.value?.trim();
-  if(!title||!salary||!loc||!skill||!contact){ showToast('⚠️ सभी जानकारी भरें'); return; }
-  const catObj = categories.find(c=>c.id===cat)||categories[0];
-  const newJob={
-    id:jobs.length+100,title,titleHi:title,category:cat,salary,salaryUnit:'month',
-    location:loc,locationHi:loc,employer:state.user.name,employerId:state.user.id,
-    contact,skill,skillHi:skill,desc:desc||'',descHi:desc||'',
-    postedDate:new Date().toISOString().slice(0,10),status:'pending',rating:0,applicants:[],featured:false
+function logout() {
+  DB.setObj('currentUser', null);
+  DB.setObj('currentEmployer', null);
+  currentUser = null;
+  currentEmployer = null;
+  updateProfile();
+  openPage('home-page');
+  showToast('Logged out successfully');
+}
+
+// ============ JOB ACTIONS ============
+function quickApply(jobId) {
+  if (!currentUser) {
+    openModal('worker-login');
+    showToast('⚠️ Please login to apply');
+    return;
+  }
+  const job = DB.get('jobs').find(j => j.id === jobId);
+  if (!job) return;
+
+  currentJobForApply = job;
+  document.getElementById('apply-job-info').innerHTML = `
+    <div style="font-weight:700;font-size:16px;">${job.title}</div>
+    <div style="color:var(--text-muted);font-size:14px;">${job.company} • ${job.location}</div>
+    <div style="color:var(--success);font-weight:700;margin-top:8px;">₹${job.salary.toLocaleString()}${job.type==='Daily Wage'?'/day':'/mo'}</div>
+  `;
+  openModal('apply-confirm');
+}
+
+function confirmApply() {
+  if (!currentUser || !currentJobForApply) return;
+  const apps = DB.get('applications');
+  if (apps.find(a => a.jobId === currentJobForApply.id && a.workerId === currentUser.id)) {
+    showToast('⚠️ Already applied for this job');
+    closeModal('modal-apply-confirm');
+    return;
+  }
+  apps.push({
+    id: Date.now(),
+    jobId: currentJobForApply.id,
+    workerId: currentUser.id,
+    workerName: currentUser.name,
+    workerSkill: currentUser.skill,
+    workerMobile: currentUser.mobile,
+    jobTitle: currentJobForApply.title,
+    company: currentJobForApply.company,
+    status: 'Pending',
+    date: new Date().toLocaleDateString()
+  });
+  DB.set('applications', apps);
+  closeModal('modal-apply-confirm');
+  showToast(`✅ Applied for ${currentJobForApply.title}!`);
+  updateProfile();
+}
+
+function postJob() {
+  if (!currentEmployer) { showToast('⚠️ Please login as employer'); return; }
+  const title = document.getElementById('pj-title').value.trim();
+  const cat = document.getElementById('pj-cat').value;
+  const salary = parseInt(document.getElementById('pj-salary').value);
+  const type = document.getElementById('pj-type').value;
+  const location = document.getElementById('pj-location').value.trim();
+  const desc = document.getElementById('pj-desc').value.trim();
+  const contact = document.getElementById('pj-contact').value.trim();
+  const msg = document.getElementById('pj-msg');
+
+  if (!title || !salary || !location || !contact) {
+    msg.innerHTML = `<div class="alert alert-danger">⚠️ Please fill all required fields</div>`;
+    return;
+  }
+
+  const jobs = DB.get('jobs');
+  const newJob = {
+    id: Date.now(),
+    title, category: cat, salary, type, location, desc, contact,
+    company: currentEmployer.name,
+    employerId: currentEmployer.id,
+    approved: false,
+    rating: 4.5,
+    distance: "? km",
+    lat: userLat || 26.85,
+    lng: userLng || 80.95,
+    date: "Just now",
+    postedBy: "employer"
   };
   jobs.push(newJob);
-  showToast('✅ नौकरी पोस्ट की! Admin मंजूरी के बाद दिखेगी।');
-  state.page='my-jobs'; render();
+  DB.set('jobs', jobs);
+  closeModal('modal-post-job');
+  showToast('✅ Job posted! Pending admin approval.');
+  openEmployerDashboard();
 }
 
-function deleteJob(id){
-  jobs = jobs.filter(j=>j.id!==id);
-  showToast('🗑️ नौकरी हटा दी गई।'); render();
+// ============ EMPLOYER DASHBOARD ============
+function openEmployerDashboard() {
+  if (!currentEmployer) { openModal('employer-login'); return; }
+  const myJobs = DB.get('jobs').filter(j => j.employerId === currentEmployer.id);
+  const myApps = DB.get('applications').filter(a => myJobs.some(j => j.id === a.jobId));
+
+  document.getElementById('employer-dashboard-content').innerHTML = `
+    <div class="alert alert-info">👋 Welcome, ${currentEmployer.name}! | ${currentEmployer.type} | ${currentEmployer.city}</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
+      <div style="background:white;border-radius:var(--radius-sm);padding:16px;text-align:center;border:1.5px solid var(--border);">
+        <div style="font-size:28px;font-weight:800;color:var(--primary);">${myJobs.length}</div>
+        <div style="font-size:12px;color:var(--text-muted);">Jobs Posted</div>
+      </div>
+      <div style="background:white;border-radius:var(--radius-sm);padding:16px;text-align:center;border:1.5px solid var(--border);">
+        <div style="font-size:28px;font-weight:800;color:var(--secondary);">${myApps.length}</div>
+        <div style="font-size:12px;color:var(--text-muted);">Applicants</div>
+      </div>
+      <div style="background:white;border-radius:var(--radius-sm);padding:16px;text-align:center;border:1.5px solid var(--border);">
+        <div style="font-size:28px;font-weight:800;color:var(--success);">${myJobs.filter(j=>j.approved).length}</div>
+        <div style="font-size:12px;color:var(--text-muted);">Active</div>
+      </div>
+    </div>
+
+    <button class="primary-btn" onclick="openModal('post-job')" style="margin-bottom:20px;">
+      ➕ Post New Job / नौकरी पोस्ट करें
+    </button>
+
+    <div style="font-weight:700;font-size:18px;margin-bottom:14px;">📋 My Job Posts</div>
+    ${myJobs.length ? myJobs.map(j => `
+      <div class="job-card" style="cursor:default;">
+        <div class="job-header">
+          <div>
+            <div class="job-title">${j.title}</div>
+            <div class="job-company">${j.location} • ${j.date}</div>
+          </div>
+          <div class="job-salary">₹${j.salary.toLocaleString()}</div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <span style="background:${j.approved?'#E8F5E9':'#FFF3E0'};color:${j.approved?'var(--success)':'#E65100'};padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">
+            ${j.approved ? '✅ Active' : '⏳ Pending Approval'}
+          </span>
+        </div>
+        <div style="font-weight:700;margin-bottom:8px;">👥 Applicants (${DB.get('applications').filter(a=>a.jobId===j.id).length})</div>
+        ${DB.get('applications').filter(a=>a.jobId===j.id).map(a => `
+          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-weight:600;">${a.workerName}</div>
+              <div style="font-size:12px;color:var(--text-muted);">${a.workerSkill} • Applied ${a.date}</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button onclick="callEmployer('${a.workerMobile}')" style="background:var(--success);color:white;border:none;padding:8px;border-radius:8px;font-size:16px;cursor:pointer;">📞</button>
+              <button onclick="whatsapp('${a.workerMobile}','applicant')" style="background:#25D366;color:white;border:none;padding:8px;border-radius:8px;font-size:16px;cursor:pointer;">💬</button>
+            </div>
+          </div>
+        `).join('') || '<div style="color:var(--text-muted);font-size:13px;">No applicants yet</div>'}
+      </div>
+    `).join('') : '<div class="loading">No jobs posted yet. Post your first job!</div>'}
+  `;
+  openPage('employer-page');
 }
 
-function adminApproveJob(id){
-  const j=jobs.find(j=>j.id===id);
-  if(j){ j.status='approved'; showToast('✅ Job Approved'); render(); }
+// ============ LOCATION ============
+function detectLocation() {
+  if (!navigator.geolocation) { showToast('❌ GPS not supported'); return; }
+  showToast('📡 Detecting your location...');
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
+
+    document.getElementById('location-info').innerHTML = `
+      <div class="alert alert-success">
+        ✅ Location detected!<br>
+        📍 Lat: ${userLat.toFixed(4)}, Lng: ${userLng.toFixed(4)}
+      </div>
+    `;
+
+    const placeholder = document.getElementById('map-placeholder');
+    if (placeholder) {
+      placeholder.innerHTML = `
+        <div style="font-size:40px;">📍</div>
+        <div style="font-weight:700;">Location Detected!</div>
+        <div style="font-size:13px;">Lat: ${userLat.toFixed(4)}, Lng: ${userLng.toFixed(4)}</div>
+        <button onclick="openGoogleMaps()" style="background:var(--secondary);color:white;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;margin-top:10px;">Open in Google Maps</button>
+      `;
+    }
+
+    document.getElementById('nav-location').textContent = `📍 ${userLat.toFixed(3)}, ${userLng.toFixed(3)}`;
+
+    if (currentUser) {
+      const workers = DB.get('workers');
+      const idx = workers.findIndex(w => w.id === currentUser.id);
+      if (idx >= 0) { workers[idx].lat = userLat; workers[idx].lng = userLng; DB.set('workers', workers); }
+    }
+    showToast('✅ Location saved!');
+  }, err => {
+    showToast('❌ Could not get location. Please allow GPS access.');
+  });
 }
 
-function adminRejectJob(id){
-  const j=jobs.find(j=>j.id===id);
-  if(j){ j.status='rejected'; showToast('❌ Job Rejected'); render(); }
-}
-
-function adminDeleteJob(id){
-  jobs=jobs.filter(j=>j.id!==id);
-  showToast('🗑️ Job Deleted'); render();
-}
-
-function adminDeleteUser(id){
-  users=users.filter(u=>u.id!==id);
-  showToast('🗑️ User Deleted'); render();
-}
-
-function adminAddJob(){
-  const title=document.getElementById('aj-title')?.value?.trim();
-  const titleHi=document.getElementById('aj-titlehi')?.value?.trim()||title;
-  const cat=document.getElementById('aj-cat')?.value;
-  const salary=document.getElementById('aj-salary')?.value?.trim();
-  const loc=document.getElementById('aj-loc')?.value?.trim();
-  const emp=document.getElementById('aj-emp')?.value?.trim();
-  const contact=document.getElementById('aj-contact')?.value?.trim();
-  if(!title||!salary||!loc){ showToast('⚠️ Fill required fields'); return; }
-  jobs.push({id:jobs.length+200,title,titleHi,category:cat,salary,salaryUnit:'month',location:loc,locationHi:loc,employer:emp||'Admin Posted',employerId:0,contact:contact||'',skill:'—',skillHi:'—',desc:'',descHi:'',postedDate:new Date().toISOString().slice(0,10),status:'approved',rating:0,applicants:[],featured:false});
-  showToast('✅ Job Added & Approved'); render();
-}
-
-function adminAddCategory(){
-  const en=document.getElementById('nc-en')?.value?.trim();
-  const hi=document.getElementById('nc-hi')?.value?.trim();
-  const icon=document.getElementById('nc-icon')?.value?.trim()||'💼';
-  if(!en||!hi){ showToast('⚠️ Fill all fields'); return; }
-  categories.push({id:en.toLowerCase().replace(' ','-'),icon,name:{en,hi},color:'#F5F5F5'});
-  showToast('✅ Category Added'); render();
-}
-
-function startVoiceSearch(){
-  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
-    showToast('⚠️ आपका ब्राउज़र voice search support नहीं करता'); return;
+function openGoogleMaps() {
+  if (userLat && userLng) {
+    window.open(`https://www.google.com/maps?q=${userLat},${userLng}`, '_blank');
+  } else {
+    window.open('https://www.google.com/maps', '_blank');
   }
-  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
-  const rec = new SR();
-  rec.lang = state.lang==='hi' ? 'hi-IN' : 'en-IN';
-  rec.start();
-  document.getElementById('voice-btn')?.classList.add('listening');
-  showToast('🎤 बोलिए...');
-  rec.onresult = (e) => {
-    const result = e.results[0][0].transcript;
-    state.searchQuery = result;
-    state.page = 'jobs';
-    document.getElementById('voice-btn')?.classList.remove('listening');
-    render();
-  };
-  rec.onerror = () => {
-    document.getElementById('voice-btn')?.classList.remove('listening');
-    showToast('❌ आवाज़ नहीं सुन सका');
-  };
 }
 
-function attachEvents(){
-  // No additional event attachment needed - all handled inline
+// ============ COMMUNICATION ============
+function callEmployer(number) {
+  if (!currentUser) { showToast('⚠️ Please login to call'); openModal('worker-login'); return; }
+  window.location.href = `tel:${number}`;
 }
 
-function buildModal(){ return ''; }
+function whatsapp(number, jobTitle) {
+  const msg = encodeURIComponent(`Hello! I saw your job post for "${jobTitle}" on RozgarSetu. I am interested. Please let me know details.`);
+  window.open(`https://wa.me/91${number}?text=${msg}`, '_blank');
+}
 
-// ---- INITIAL RENDER ----
-state.adminTab = 'jobs';
-render();
+// ============ VOICE SEARCH ============
+function startVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast('❌ Voice search not supported in this browser');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SR();
+  recognition.lang = lang === 'hi' ? 'hi-IN' : 'en-IN';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  const btn = document.getElementById('voice-btn');
+  btn.classList.add('listening');
+  btn.textContent = '🔴';
+  showToast('🎤 Listening... Speak now!');
+
+  recognition.onresult = e => {
+    const text = e.results[0][0].transcript;
+    document.getElementById('search-input').value = text;
+    filterJobs();
+    showToast(`🎤 Heard: "${text}"`);
+  };
+  recognition.onend = () => { btn.classList.remove('listening'); btn.textContent = '🎤'; };
+  recognition.onerror = () => { btn.classList.remove('listening'); btn.textContent = '🎤'; showToast('❌ Voice error. Try again.'); };
+  recognition.start();
+}
+
+// ============ PROFILE ============
+function updateProfile() {
+  currentUser = DB.getObj('currentUser');
+  if (currentUser) {
+    document.getElementById('profile-name').textContent = currentUser.name;
+    document.getElementById('profile-skill-display').textContent = `${currentUser.skill} • ${currentUser.city}`;
+    const apps = DB.get('applications').filter(a => a.workerId === currentUser.id);
+    document.getElementById('stat-applied').textContent = apps.length;
+    document.getElementById('stat-shortlisted').textContent = Math.floor(apps.length * 0.3);
+    document.getElementById('profile-avatar').textContent = CATS.find(c => c.name === currentUser.skill)?.emoji || '👷';
+  }
+
+  const aplList = document.getElementById('applications-list');
+  if (aplList && currentUser) {
+    const apps = DB.get('applications').filter(a => a.workerId === currentUser.id);
+    aplList.innerHTML = apps.length ? apps.map(a => `
+      <div class="job-card" style="cursor:default;">
+        <div class="job-title">${a.jobTitle}</div>
+        <div class="job-company">${a.company}</div>
+        <div style="margin-top:10px;">
+          <span style="background:${a.status==='Pending'?'#FFF3E0':'#E8F5E9'};color:${a.status==='Pending'?'#E65100':'var(--success)'};padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700;">
+            ${a.status === 'Pending' ? '⏳ Pending' : '✅ ' + a.status}
+          </span>
+          <span style="color:var(--text-muted);font-size:12px;margin-left:10px;">Applied ${a.date}</span>
+        </div>
+      </div>
+    `).join('') : '<div class="loading">No applications yet. Apply for jobs!</div>';
+  }
+}
+
+// ============ NOTIFICATIONS ============
+function renderNotifications() {
+  const el = document.getElementById('notifications-list');
+  if (!el) return;
+  el.innerHTML = NOTIFS.map(n => `
+    <div style="background:white;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start;">
+      <div style="font-size:28px;">${n.icon}</div>
+      <div>
+        <div style="font-weight:700;font-size:15px;">${n.title}</div>
+        <div style="color:var(--text-muted);font-size:13px;margin-top:3px;">${n.body}</div>
+        <div style="color:var(--primary);font-size:11px;margin-top:5px;font-weight:600;">${n.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============ LANGUAGE ============
+function toggleLang() {
+  lang = lang === 'en' ? 'hi' : 'en';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = lang === 'hi' ? el.dataset.hi : el.dataset.en;
+  });
+  showToast(lang === 'hi' ? 'हिंदी भाषा चुनी' : 'English language selected');
+}
+
+// ============ DARK MODE ============
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  showToast(document.body.classList.contains('dark') ? '🌙 Dark mode on' : '☀️ Light mode on');
+}
+
+// ============ UI HELPERS ============
+function openPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId)?.classList.add('active');
+  window.scrollTo(0,0);
+  if (pageId === 'my-applications-page') updateProfile();
+}
+
+function openModal(name) {
+  closeAllModals();
+  document.getElementById(`modal-${name}`)?.classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id)?.classList.remove('open');
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+});
+
+function showToast(msg, duration = 2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event?.target?.closest('.nav-item')?.classList.add('active');
+
+  if (tab === 'applications') { openPage('my-applications-page'); return; }
+  if (tab === 'search') { document.getElementById('search-input')?.focus(); }
+  openPage('home-page');
+}
+
+// ============ START ============
+init();
 </script>
 </body>
 </html>
