@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RozgarSetu - Local Employment System</title>
+<title>Grameen Rozgar - Local Employment System</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -666,7 +666,7 @@ body.dark {
 
   <nav class="top-nav">
     <div class="nav-logo">
-      🌾 RozgarSetu
+       Grameen Rozgar
       <span id="nav-location">📍 Your City</span>
     </div>
     <div class="nav-actions">
@@ -827,7 +827,7 @@ body.dark {
 <!-- Worker Register -->
 <div class="modal-overlay" id="modal-worker-register">
   <div class="modal">
-    <div class="modal-title">👷 Worker Registration <button class="modal-close" onclick="closeModal('modal-worker-register')">✕</button></div>
+    <div class="modal-title">👷 Worker Registration नियोक्ता पंजीकरण <button class="modal-close" onclick="closeModal('modal-worker-register')">✕</button></div>
     <div id="wr-msg"></div>
     <div class="form-group">
       <label class="form-label">Full Name / पूरा नाम</label>
@@ -888,7 +888,7 @@ body.dark {
 <!-- Employer Register -->
 <div class="modal-overlay" id="modal-employer-register">
   <div class="modal">
-    <div class="modal-title">🏢 Employer Registration <button class="modal-close" onclick="closeModal('modal-employer-register')">✕</button></div>
+    <div class="modal-title">🏢 Employer Registration नियोक्ता पंजीकरण <button class="modal-close" onclick="closeModal('modal-employer-register')">✕</button></div>
     <div id="er-msg"></div>
     <div class="form-group">
       <label class="form-label">Company/Name / कंपनी</label>
@@ -1546,7 +1546,7 @@ function callEmployer(number) {
 }
 
 function whatsapp(number, jobTitle) {
-  const msg = encodeURIComponent(`Hello! I saw your job post for "${jobTitle}" on RozgarSetu. I am interested. Please let me know details.`);
+  const msg = encodeURIComponent(`Hello! I saw your job post for "${jobTitle}" on Grameen Rozgar. I am interested. Please let me know details.`);
   window.open(`https://wa.me/91${number}?text=${msg}`, '_blank');
 }
 
